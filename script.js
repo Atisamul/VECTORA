@@ -597,3 +597,28 @@ document.addEventListener("DOMContentLoaded", () => {
   updateParallax();
 
 });
+/* ===== SAFE VECTORA SCROLL PROGRESS ===== */
+
+(() => {
+  const updateScrollProgress = () => {
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const progress = maxScroll > 0
+      ? Math.min(Math.max(window.scrollY / maxScroll, 0), 1)
+      : 0;
+
+    document.documentElement.style.setProperty(
+      "--scroll-progress",
+      progress
+    );
+  };
+
+  window.addEventListener("scroll", updateScrollProgress, {
+    passive: true
+  });
+
+  window.addEventListener("resize", updateScrollProgress);
+
+  updateScrollProgress();
+})();
