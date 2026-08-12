@@ -520,3 +520,80 @@ document.addEventListener("keydown", (event) => {
   if (imageModal.classList.contains("is-open") && event.key === "ArrowRight") shiftLightbox(1);
   trapFocus(event);
 });
+/* ===== VECTORA SCROLL EFFECTS ===== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Scroll Reveal
+  const revealElements = document.querySelectorAll(
+    "section, .product-card, .feature-card, .collection-card, .hero-content"
+  );
+
+  revealElements.forEach((element) => {
+    element.classList.add("scroll-reveal");
+  });
+
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    },
+    {
+      threshold: 0.12
+    }
+  );
+
+  revealElements.forEach((element) => {
+    revealObserver.observe(element);
+  });
+
+
+  // Scroll Progress
+  function updateScrollProgress() {
+    const scrollTop = window.scrollY;
+    const documentHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const progress =
+      documentHeight > 0 ? scrollTop / documentHeight : 0;
+
+    document.documentElement.style.setProperty(
+      "--scroll-progress",
+      progress
+    );
+  }
+
+  window.addEventListener("scroll", updateScrollProgress, {
+    passive: true
+  });
+
+  updateScrollProgress();
+
+
+  // Parallax Effect
+  const parallaxElements =
+    document.querySelectorAll(".scroll-parallax");
+
+  function updateParallax() {
+    parallaxElements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const center =
+        rect.top + rect.height / 2 - window.innerHeight / 2;
+
+      const movement = center * -0.08;
+
+      element.style.transform =
+        `translateY(${movement}px)`;
+    });
+  }
+
+  window.addEventListener("scroll", updateParallax, {
+    passive: true
+  });
+
+  updateParallax();
+
+});
