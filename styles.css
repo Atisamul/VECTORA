@@ -427,3 +427,124 @@ h2 { margin-bottom: 0; font-size: clamp(3rem, 6.3vw, 6.4rem); line-height: .88; 
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+/* =========================================================
+   VECTORA PREMIUM CURSOR + GALLERY EFFECT
+   ========================================================= */
+
+/* Cursor glow */
+.cursor-glow {
+  position: fixed;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(218, 190, 125, 0.12) 0%,
+    rgba(218, 190, 125, 0.05) 35%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+}
+
+body:hover .cursor-glow {
+  opacity: 1;
+}
+
+/* Gallery images */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.5s cubic-bezier(.2,.8,.2,1),
+    box-shadow 0.5s ease;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition:
+    transform 0.8s cubic-bezier(.2,.8,.2,1),
+    filter 0.6s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.07);
+  filter: brightness(1.08);
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.35);
+}
+
+/* Premium image shine */
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(255,255,255,.14) 45%,
+      transparent 65%
+    );
+  transform: translateX(-120%);
+  transition: transform 0.9s ease;
+}
+
+.gallery-item:hover::after {
+  transform: translateX(120%);
+}
+
+/* Product image cursor effect */
+.product-card-button {
+  cursor: pointer;
+}
+
+.product-image {
+  overflow: hidden;
+}
+
+.product-image img {
+  transition:
+    transform 0.8s cubic-bezier(.2,.8,.2,1),
+    filter 0.5s ease;
+}
+
+.product-card-button:hover .product-image img {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+}
+
+/* Mobile پر cursor glow بند */
+@media (hover: none) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-item,
+  .gallery-item img,
+  .product-image img {
+    transition: none;
+  }
+
+  .gallery-item::after {
+    display: none;
+  }
+}
