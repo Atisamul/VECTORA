@@ -1,16 +1,260 @@
 "use strict";
 
 /* =========================================================
-   VECTORA — FINAL SCRIPT.JS
-   Cart + WhatsApp + Gallery + Modal + Scroll + Cursor
+   VECTORA — COMPLETE SCRIPT.JS
+   Cart + WhatsApp + Gallery + Modal + Effects
    ========================================================= */
 
-const WHATSAPP_NUMBER = "923328252059";
+const STORE_NAME = "VECTORA";
 const STORE_EMAIL = "Waqtora000@gmail.com";
+const WHATSAPP_NUMBER = "923328252059";
 
-/* ---------------------------------------------------------
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+const products = [
+  {
+    id: "steel-signature",
+    category: "steel",
+    categoryLabel: "Steel edit",
+    name: "Steel Signature",
+    short: "White dial · polished steel",
+    image: "assets/steel-white.jpg",
+    description: "A bright, textured dial meets polished steel tones and a strong fluted-inspired profile. Made for a confident everyday rotation.",
+    palette: "Silver · White",
+    notes: "Statement steel",
+    price: null
+  },
+  {
+    id: "steel-noir",
+    category: "steel",
+    categoryLabel: "Steel edit",
+    name: "Steel Noir",
+    short: "Black dial · silver steel",
+    image: "assets/steel-black.jpg",
+    description: "A darker expression of the steel edit, with a graphic black dial and reflective bracelet detail for evening presence.",
+    palette: "Black · Silver",
+    notes: "Statement steel",
+    price: null
+  },
+  {
+    id: "chrono-noir",
+    category: "steel",
+    categoryLabel: "Sport edit",
+    name: "Chrono Noir",
+    short: "Black metal · bold dial",
+    image: "assets/black-chrono.jpg",
+    description: "An all-black chronograph-inspired look that brings a sharper, athletic edge to the collection.",
+    palette: "Black · Violet detail",
+    notes: "Sport statement",
+    price: null
+  },
+  {
+    id: "gold-day",
+    category: "steel",
+    categoryLabel: "Gold edit",
+    name: "Golden Day",
+    short: "Gold tone · white dial",
+    image: "assets/gold-day-watch.jpg",
+    description: "A luminous gold-tone finish and bright patterned dial create an unapologetically elevated wrist presence.",
+    palette: "Gold · White",
+    notes: "Celebration piece",
+    price: null
+  },
+  {
+    id: "gold-linear",
+    category: "rectangular",
+    categoryLabel: "Rectangular",
+    name: "Gold Linear",
+    short: "Gold tone · black dial",
+    image: "assets/gold-rectangular.jpg",
+    description: "A slim rectangular case with a sculptural, gold-tone bracelet—an expressive choice for dressier moments.",
+    palette: "Gold · Black",
+    notes: "Rectangular dress",
+    price: null
+  },
+  {
+    id: "silver-gold-line",
+    category: "rectangular",
+    categoryLabel: "Rectangular",
+    name: "Silver Gold Line",
+    short: "Two tone · white dial",
+    image: "assets/two-tone-rectangular.jpg",
+    description: "Silver and gold-tone details meet a crisp white Roman-numeral dial for a balanced, traditional expression.",
+    palette: "Silver · Gold · White",
+    notes: "Two-tone dress",
+    price: null
+  },
+  {
+    id: "emerald-gold",
+    category: "rectangular",
+    categoryLabel: "Rectangular",
+    name: "Emerald Gold",
+    short: "Gold tone · green dial",
+    image: "assets/green-gold-rectangular.jpg",
+    description: "Deep green and warm gold bring an unexpectedly rich colour story to a compact rectangular profile.",
+    palette: "Gold · Emerald",
+    notes: "Colour statement",
+    price: null
+  },
+  {
+    id: "burgundy-gold",
+    category: "rectangular",
+    categoryLabel: "Rectangular",
+    name: "Burgundy Gold",
+    short: "Gold tone · wine dial",
+    image: "assets/burgundy-gold-rectangular.jpg",
+    description: "A wine-toned dial framed in gold delivers vintage character with a confident contemporary finish.",
+    palette: "Gold · Burgundy",
+    notes: "Colour statement",
+    price: null
+  },
+  {
+    id: "ivory-two-tone",
+    category: "rectangular",
+    categoryLabel: "Rectangular",
+    name: "Ivory Two-Tone",
+    short: "Silver & gold · ivory dial",
+    image: "assets/two-tone-ivory-rectangular.jpg",
+    description: "Warm ivory, silver and gold create a versatile rectangular look with a quieter sense of luxury.",
+    palette: "Silver · Gold · Ivory",
+    notes: "Two-tone dress",
+    price: null
+  },
+  {
+    id: "square-slate",
+    category: "square",
+    categoryLabel: "Modern square",
+    name: "Square Slate",
+    short: "Matte black · steel strap",
+    image: "assets/square-black-matte.jpg",
+    description: "A clean square face and matte black profile make this a minimalist alternative to the traditional round watch.",
+    palette: "Black · Steel",
+    notes: "Modern square",
+    price: null
+  },
+  {
+    id: "square-ivory",
+    category: "square",
+    categoryLabel: "Modern square",
+    name: "Square Ivory",
+    short: "White dial · dark frame",
+    image: "assets/square-white-hand.jpg",
+    description: "Crisp white under a dark frame, keeping the geometry clean and the look easy to wear day to night.",
+    palette: "White · Black",
+    notes: "Modern square",
+    price: null
+  },
+  {
+    id: "square-taupe",
+    category: "square",
+    categoryLabel: "Modern square",
+    name: "Square Taupe",
+    short: "Taupe dial · silver tone",
+    image: "assets/square-taupe-hand.jpg",
+    description: "A softer neutral dial paired with a silver-tone case for a distinctly contemporary, pared-back feel.",
+    palette: "Taupe · Silver",
+    notes: "Modern square",
+    price: null
+  },
+  {
+    id: "classic-silver",
+    category: "classic",
+    categoryLabel: "Classic",
+    name: "Classic Silver",
+    short: "Silver steel · white dial",
+    image: "assets/classic-silver-glove.jpg",
+    description: "Crisp markers, polished steel and a white dial bring familiar dress-watch balance to a versatile daily piece.",
+    palette: "Silver · White",
+    notes: "Classic dress",
+    price: null
+  },
+  {
+    id: "heritage-leather",
+    category: "classic",
+    categoryLabel: "Classic",
+    name: "Heritage Leather",
+    short: "Brown leather · white dial",
+    image: "assets/classic-brown.jpg",
+    description: "A warm brown textured strap sets off a bright, diamond-accented dial for a formal, gift-ready option.",
+    palette: "Brown · White · Silver",
+    notes: "Classic dress",
+    price: null
+  },
+  {
+    id: "emerald-bangle",
+    category: "ladies",
+    categoryLabel: "Ladies",
+    name: "Emerald Bangle",
+    short: "Gold bangle · green dial",
+    image: "assets/ladies-green-bangle.jpg",
+    description: "An oval green dial, diamond-style frame and fine gold bangle shape make an elegant statement for special occasions.",
+    palette: "Gold · Emerald",
+    notes: "Ladies bangle",
+    price: null
+  },
+  {
+    id: "ice-bangle",
+    category: "ladies",
+    categoryLabel: "Ladies",
+    name: "Ice Bangle",
+    short: "Gold bangle · pale blue dial",
+    image: "assets/ladies-blue-bangle.jpg",
+    description: "A light blue oval dial framed in warm gold offers a softer, luminous take on the bangle-watch silhouette.",
+    palette: "Gold · Ice blue",
+    notes: "Ladies bangle",
+    price: null
+  }
+];
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+const archive = [
+  ["hero-steel-duo.jpg", "Two polished steel watches shown in a presentation box"],
+  ["steel-back.jpg", "Close view of a steel watch bracelet and back"],
+  ["steel-white.jpg", "White dial steel watch in a light presentation box"],
+  ["steel-collection.jpg", "Selection of black and white dial steel watches"],
+  ["steel-black.jpg", "Black dial steel watch in a dark presentation box"],
+  ["black-chrono.jpg", "Black chronograph-style watch collage"],
+  ["gold-rectangular.jpg", "Gold rectangular watch collection"],
+  ["two-tone-rectangular.jpg", "Silver and gold rectangular watch collection"],
+  ["gold-pearl-rectangular.jpg", "Gold rectangular watch with a bright dial"],
+  ["silver-black-rectangular.jpg", "Silver rectangular watch with dark Roman numeral dial"],
+  ["silver-white-rectangular.jpg", "Silver rectangular watch with white Roman numeral dial"],
+  ["green-gold-rectangular.jpg", "Green dial rectangular gold-tone watch"],
+  ["green-gold-alt.jpg", "Green dial gold-tone rectangular watch close-up"],
+  ["rose-steel-rectangular.jpg", "Rose-tone and silver rectangular watch"],
+  ["burgundy-gold-rectangular.jpg", "Burgundy dial rectangular gold-tone watch"],
+  ["two-tone-ivory-rectangular.jpg", "Ivory dial silver and gold rectangular watch"],
+  ["gold-day-watch.jpg", "Gold-tone watch with a bright patterned dial"],
+  ["square-silver-hand.jpg", "Square silver-tone watch held in hand"],
+  ["square-black-hand.jpg", "Square black dial watch held in hand"],
+  ["square-gold-hand.jpg", "Square gold dial watch held in hand"],
+  ["square-trio.jpg", "Three modern square watches on a display surface"],
+  ["square-black-silver.jpg", "Black square watch with silver-tone case"],
+  ["square-black-matte.jpg", "Matte black square watch held in hand"],
+  ["square-trio-bright.jpg", "Three square watches against a bright backdrop"],
+  ["square-trio-vertical.jpg", "Three modern square watches arranged vertically"],
+  ["square-white-hand.jpg", "White dial square watch held in hand"],
+  ["square-taupe-hand.jpg", "Taupe dial square watch held in hand"],
+  ["square-taupe-black.jpg", "Taupe dial square watch with black frame"],
+  ["classic-silver-glove.jpg", "Classic silver-tone watch held with a white glove"],
+  ["ladies-green-bangle.jpg", "Emerald green ladies bangle watch in a gift box"],
+  ["ladies-blue-bangle.jpg", "Light blue ladies bangle watch in a gift box"],
+  ["classic-brown.jpg", "Classic white dial watch with brown leather strap in its box"],
+  ["classic-black.jpg", "Classic black dial watch with a dark leather strap"],
+  ["time-extra-mark.jpg", "Time Extra gold and black watch-inspired mark"]
+].map(([file, alt]) => ({
+  src: `assets/${file}`,
+  alt
+}));
+
+/* =========================================================
    HELPERS
---------------------------------------------------------- */
+========================================================= */
 
 const $ = (selector, scope = document) =>
   scope.querySelector(selector);
@@ -18,9 +262,26 @@ const $ = (selector, scope = document) =>
 const $$ = (selector, scope = document) =>
   [...scope.querySelectorAll(selector)];
 
-/* ---------------------------------------------------------
-   STATE
---------------------------------------------------------- */
+/* =========================================================
+   DOM
+========================================================= */
+
+const productGrid = $("#product-grid");
+const galleryGrid = $("#gallery-grid");
+const productModal = $("#product-modal");
+const imageModal = $("#image-modal");
+const modalBody = $("#modal-body");
+const lightboxImage = $("#lightbox-image");
+const lightboxCount = $("#lightbox-count");
+const toast = $("#toast");
+
+let activeProduct = null;
+let lastFocus = null;
+let lightboxIndex = 0;
+
+/* =========================================================
+   CART
+========================================================= */
 
 let cart = [];
 
@@ -36,148 +297,14 @@ try {
   cart = [];
 }
 
-let activeProduct = null;
-let lastFocus = null;
-let lightboxIndex = 0;
-
-/* ---------------------------------------------------------
-   CONFIG
---------------------------------------------------------- */
-
-const CART_KEY = "vectora-cart";
-
-/* ---------------------------------------------------------
-   DOM
---------------------------------------------------------- */
-
-const productGrid = $("#product-grid");
-const galleryGrid = $("#gallery-grid");
-
-const productModal = $("#product-modal");
-const imageModal = $("#image-modal");
-
-const modalBody = $("#modal-body");
-const lightboxImage = $("#lightbox-image");
-const lightboxCount = $("#lightbox-count");
-
-const toast = $("#toast");
-
-const cartDrawer = $("#cart-drawer");
-const cartItems = $("#cart-items");
-const cartTotal = $("#cart-total");
-const cartWhatsapp = $("#cart-whatsapp");
-const cartClose = $("#cart-close");
-
-const backToTop = $("#back-to-top");
-
-/* =========================================================
-   PRODUCT DATA SAFETY
-   ========================================================= */
-
-/*
-   Your existing project may define products/archive
-   in another script or inline data.
-
-   We never crash if those arrays are missing.
-*/
-
-function getProducts() {
-  return Array.isArray(window.products)
-    ? window.products
-    : [];
-}
-
-function getArchive() {
-  return Array.isArray(window.archive)
-    ? window.archive
-    : [];
-}
-
-/* =========================================================
-   TEXT / HTML SAFETY
-   ========================================================= */
-
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-/* =========================================================
-   WHATSAPP
-========================================================= */
-
-function whatsappUrl(message) {
-  return (
-    "https://wa.me/" +
-    WHATSAPP_NUMBER +
-    "?text=" +
-    encodeURIComponent(message)
+function saveCart() {
+  localStorage.setItem(
+    "vectora-cart",
+    JSON.stringify(cart)
   );
 }
 
-function getProductImageUrl(image) {
-
-  if (!image) {
-    return "";
-  }
-
-  try {
-    return new URL(
-      image,
-      window.location.href
-    ).href;
-  } catch {
-    return image;
-  }
-}
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer = null;
-
-function showToast(message) {
-
-  if (!toast) {
-    return;
-  }
-
-  toast.textContent = message;
-
-  toast.classList.add("is-visible");
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("is-visible");
-  }, 2600);
-}
-
-/* =========================================================
-   CART STORAGE
-========================================================= */
-
-function saveCart() {
-
-  try {
-    localStorage.setItem(
-      CART_KEY,
-      JSON.stringify(cart)
-    );
-  } catch {
-    // Storage unavailable
-  }
-
-  updateCartUI();
-}
-
-function getCartCount() {
-
+function cartCount() {
   return cart.reduce(
     (total, item) =>
       total + Number(item.quantity || 0),
@@ -185,288 +312,384 @@ function getCartCount() {
   );
 }
 
-/* =========================================================
-   PRICE
-========================================================= */
-
-function getProductPrice(product) {
-
-  if (!product) {
-    return "Price on request";
-  }
-
-  return (
-    product.price ??
-    product.salePrice ??
-    "Price on request"
+function getProduct(id) {
+  return products.find(
+    product =>
+      String(product.id) === String(id)
   );
 }
 
-function numericPrice(price) {
+/* =========================================================
+   TOAST
+========================================================= */
 
-  if (
-    price === null ||
-    price === undefined
-  ) {
-    return 0;
-  }
+function showToast(message) {
 
-  const value = String(price)
-    .replace(/,/g, "")
-    .replace(/[^\d.]/g, "");
+  if (!toast) return;
 
-  const number = Number.parseFloat(value);
+  toast.textContent = message;
+  toast.classList.add("show");
 
-  return Number.isFinite(number)
-    ? number
-    : 0;
+  clearTimeout(
+    window.vectoraToastTimer
+  );
+
+  window.vectoraToastTimer =
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3000);
 }
 
 /* =========================================================
-   ADD TO CART
+   CART UI — CREATED AUTOMATICALLY
 ========================================================= */
 
-function addToCart(product) {
+function createCartUI() {
 
-  if (!product || !product.id) {
+  if ($("#vectora-cart-drawer")) {
     return;
   }
 
-  const existing =
-    cart.find(
-      item => item.id === product.id
+  const style = document.createElement("style");
+
+  style.id = "vectora-cart-style";
+
+  style.textContent = `
+    #vectora-cart-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none;
+    }
+
+    #vectora-cart-drawer .vectora-cart-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(7px);
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+
+    #vectora-cart-drawer .vectora-cart-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(470px, 94vw);
+      height: 100%;
+      background: #101010;
+      color: #f5f1e9;
+      border-left: 1px solid rgba(255,255,255,.12);
+      transform: translateX(105%);
+      transition: transform .45s cubic-bezier(.2,.7,.2,1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -20px 0 80px rgba(0,0,0,.4);
+    }
+
+    #vectora-cart-drawer.is-open {
+      pointer-events: auto;
+    }
+
+    #vectora-cart-drawer.is-open .vectora-cart-overlay {
+      opacity: 1;
+    }
+
+    #vectora-cart-drawer.is-open .vectora-cart-panel {
+      transform: translateX(0);
+    }
+
+    .vectora-cart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .vectora-cart-head h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .vectora-cart-close {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255,255,255,.15);
+      background: transparent;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .vectora-cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 24px;
+    }
+
+    .vectora-cart-item {
+      display: grid;
+      grid-template-columns: 74px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .vectora-cart-item img {
+      width: 74px;
+      height: 74px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #171717;
+    }
+
+    .vectora-cart-item h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+
+    .vectora-cart-price {
+      color: #e5c77c;
+      font-size: 12px;
+      margin-bottom: 9px;
+    }
+
+    .vectora-qty {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: 3px 6px;
+    }
+
+    .vectora-qty button {
+      width: 25px;
+      height: 25px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      color: white;
+      cursor: pointer;
+    }
+
+    .vectora-remove {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    .vectora-cart-bottom {
+      padding: 22px 24px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    .vectora-cart-total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .vectora-cart-whatsapp {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 999px;
+      background: #d8bd73;
+      color: #111;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .vectora-cart-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(216,189,115,.2);
+    }
+
+    .vectora-empty {
+      padding: 70px 10px;
+      text-align: center;
+      color: #999;
+    }
+
+    .vectora-empty strong {
+      display: block;
+      color: white;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    @media(max-width:600px) {
+      #vectora-cart-drawer .vectora-cart-panel {
+        width: 100%;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  const drawer = document.createElement("div");
+
+  drawer.id = "vectora-cart-drawer";
+
+  drawer.innerHTML = `
+    <div class="vectora-cart-overlay"></div>
+
+    <aside
+      class="vectora-cart-panel"
+      aria-label="Shopping cart"
+    >
+
+      <div class="vectora-cart-head">
+
+        <div>
+          <small style="color:#999;letter-spacing:.15em;">
+            VECTORA
+          </small>
+
+          <h2>Your Selection</h2>
+        </div>
+
+        <button
+          type="button"
+          class="vectora-cart-close"
+          aria-label="Close cart"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div class="vectora-cart-items"></div>
+
+      <div class="vectora-cart-bottom">
+
+        <div class="vectora-cart-total">
+          <span>Selected pieces</span>
+          <strong class="vectora-cart-count">0</strong>
+        </div>
+
+        <button
+          type="button"
+          class="vectora-cart-whatsapp"
+        >
+          ORDER / ASK ON WHATSAPP ↗
+        </button>
+
+      </div>
+
+    </aside>
+  `;
+
+  document.body.appendChild(drawer);
+
+  $(".vectora-cart-overlay")
+    .addEventListener(
+      "click",
+      closeCart
     );
 
-  if (existing) {
-
-    existing.quantity =
-      Number(existing.quantity || 0) + 1;
-
-  } else {
-
-    cart.push({
-      id: product.id,
-      name: product.name || "Watch",
-      image: product.image || "",
-      price: getProductPrice(product),
-      quantity: 1
-    });
-  }
-
-  saveCart();
-
-  showToast(
-    `${product.name || "Watch"} added to your selection ✓`
-  );
-}
-
-/* =========================================================
-   REMOVE CART ITEM
-========================================================= */
-
-function removeFromCart(id) {
-
-  cart =
-    cart.filter(
-      item => String(item.id) !== String(id)
+  $(".vectora-cart-close")
+    .addEventListener(
+      "click",
+      closeCart
     );
 
-  saveCart();
-
-  renderCart();
-}
-
-/* =========================================================
-   CHANGE QUANTITY
-========================================================= */
-
-function changeQuantity(id, amount) {
-
-  const item =
-    cart.find(
-      product =>
-        String(product.id) === String(id)
+  $(".vectora-cart-whatsapp")
+    .addEventListener(
+      "click",
+      sendCartToWhatsApp
     );
-
-  if (!item) {
-    return;
-  }
-
-  item.quantity =
-    Number(item.quantity || 0) + amount;
-
-  if (item.quantity <= 0) {
-
-    removeFromCart(id);
-    return;
-  }
-
-  saveCart();
-
-  renderCart();
 }
 
 /* =========================================================
-   CART UI
-========================================================= */
-
-function updateCartUI() {
-
-  const count = getCartCount();
-
-  $$(".cart-count").forEach(element => {
-
-    element.textContent = count;
-
-    element.classList.toggle(
-      "has-items",
-      count > 0
-    );
-  });
-}
-
-/* =========================================================
-   CART DRAWER
-========================================================= */
-
-function openCart() {
-
-  if (!cartDrawer) {
-    return;
-  }
-
-  cartDrawer.classList.add("is-open");
-
-  cartDrawer.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  document.body.classList.add(
-    "cart-open"
-  );
-
-  renderCart();
-
-  setTimeout(() => {
-    cartClose?.focus();
-  }, 50);
-}
-
-function closeCart() {
-
-  if (!cartDrawer) {
-    return;
-  }
-
-  cartDrawer.classList.remove("is-open");
-
-  cartDrawer.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  document.body.classList.remove(
-    "cart-open"
-  );
-}
-
-/* =========================================================
-   CART RENDER
+   RENDER CART
 ========================================================= */
 
 function renderCart() {
 
-  if (!cartItems) {
-    return;
-  }
+  const drawer =
+    $("#vectora-cart-drawer");
+
+  if (!drawer) return;
+
+  const container =
+    $(".vectora-cart-items", drawer);
+
+  const count =
+    $(".vectora-cart-count", drawer);
+
+  count.textContent =
+    cartCount();
 
   if (!cart.length) {
 
-    cartItems.innerHTML = `
-      <div class="cart-empty">
-        <span>◌</span>
-
-        <h3>Your cart is empty</h3>
-
-        <p>
-          Add a watch from the collection
-          to begin your selection.
-        </p>
-
-        <a
-          class="button button-gold"
-          href="#products"
-          id="continue-shopping"
-        >
-          Explore Watches
-        </a>
+    container.innerHTML = `
+      <div class="vectora-empty">
+        <strong>Your selection is empty</strong>
+        Choose a watch to add it here.
       </div>
     `;
-
-    updateCartTotal();
 
     return;
   }
 
-  cartItems.innerHTML =
+  container.innerHTML =
     cart.map(item => {
 
-      const image =
-        escapeHTML(item.image || "");
+      const product =
+        getProduct(item.id);
 
-      const name =
-        escapeHTML(item.name || "Watch");
-
-      const price =
-        escapeHTML(
-          item.price || "Price on request"
-        );
-
-      const id =
-        escapeHTML(String(item.id));
+      if (!product) {
+        return "";
+      }
 
       return `
-        <article class="cart-item">
+        <div class="vectora-cart-item">
 
-          <div class="cart-item-image">
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+            loading="lazy"
+          >
 
-            <img
-              src="${image}"
-              alt="${name}"
-              loading="lazy"
-            >
-
-          </div>
-
-          <div class="cart-item-info">
+          <div>
 
             <h4>
-              ${name}
+              ${product.name}
             </h4>
 
-            <p class="cart-item-price">
-              ${price}
-            </p>
+            <div class="vectora-cart-price">
+              ${product.price
+                ? `Rs. ${product.price}`
+                : "Price on request"}
+            </div>
 
-            <div class="cart-quantity">
+            <div class="vectora-qty">
 
               <button
                 type="button"
-                data-cart-minus="${id}"
-                aria-label="Decrease quantity"
+                data-cart-minus="${product.id}"
               >
                 −
               </button>
 
               <span>
-                ${Number(item.quantity || 1)}
+                ${item.quantity}
               </span>
 
               <button
                 type="button"
-                data-cart-plus="${id}"
-                aria-label="Increase quantity"
+                data-cart-plus="${product.id}"
               >
                 +
               </button>
@@ -477,133 +700,201 @@ function renderCart() {
 
           <button
             type="button"
-            class="cart-remove"
-            data-cart-remove="${id}"
-            aria-label="Remove ${name}"
+            class="vectora-remove"
+            data-cart-remove="${product.id}"
           >
             ×
           </button>
 
-        </article>
+        </div>
       `;
 
     }).join("");
-
-  updateCartTotal();
 }
 
 /* =========================================================
-   CART TOTAL
+   OPEN / CLOSE CART
 ========================================================= */
 
-function updateCartTotal() {
+function openCart() {
 
-  if (!cartTotal) {
-    return;
-  }
+  createCartUI();
+  renderCart();
 
-  const total =
-    cart.reduce(
-      (sum, item) => {
+  const drawer =
+    $("#vectora-cart-drawer");
 
-        return (
-          sum +
-          numericPrice(item.price) *
-          Number(item.quantity || 0)
-        );
+  drawer.classList.add(
+    "is-open"
+  );
 
-      },
-      0
-    );
+  document.body.style.overflow =
+    "hidden";
+}
 
-  cartTotal.textContent =
-    total > 0
-      ? `Rs. ${total.toLocaleString()}`
-      : "Price on request";
+function closeCart() {
+
+  const drawer =
+    $("#vectora-cart-drawer");
+
+  if (!drawer) return;
+
+  drawer.classList.remove(
+    "is-open"
+  );
+
+  document.body.style.overflow =
+    "";
 }
 
 /* =========================================================
-   CART CLICK EVENTS
+   ADD TO CART
+========================================================= */
+
+function addToCart(id) {
+
+  const product =
+    getProduct(id);
+
+  if (!product) return;
+
+  const existing =
+    cart.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({
+      id: product.id,
+      quantity: 1
+    });
+  }
+
+  saveCart();
+  renderCart();
+
+  showToast(
+    `${product.name} added to your selection`
+  );
+}
+
+/* =========================================================
+   CART QUANTITY
+========================================================= */
+
+function changeCartQuantity(
+  id,
+  amount
+) {
+
+  const item =
+    cart.find(
+      product =>
+        String(product.id) ===
+        String(id)
+    );
+
+  if (!item) return;
+
+  item.quantity += amount;
+
+  if (item.quantity <= 0) {
+    cart =
+      cart.filter(
+        product =>
+          String(product.id) !==
+          String(id)
+      );
+  }
+
+  saveCart();
+  renderCart();
+}
+
+/* =========================================================
+   CART EVENTS
 ========================================================= */
 
 document.addEventListener(
   "click",
   event => {
 
-    const addButton =
+    const add =
       event.target.closest(
         "[data-add-cart]"
       );
 
-    if (addButton) {
+    if (add) {
 
       event.preventDefault();
       event.stopPropagation();
 
-      const id =
-        addButton.dataset.addCart;
-
-      const product =
-        getProducts().find(
-          item =>
-            String(item.id) ===
-            String(id)
-        );
-
-      if (product) {
-        addToCart(product);
-      }
-
-      return;
-    }
-
-    const removeButton =
-      event.target.closest(
-        "[data-cart-remove]"
-      );
-
-    if (removeButton) {
-
-      removeFromCart(
-        removeButton.dataset.cartRemove
+      addToCart(
+        add.dataset.addCart
       );
 
       return;
     }
 
-    const plusButton =
+    const plus =
       event.target.closest(
         "[data-cart-plus]"
       );
 
-    if (plusButton) {
+    if (plus) {
 
-      changeQuantity(
-        plusButton.dataset.cartPlus,
+      changeCartQuantity(
+        plus.dataset.cartPlus,
         1
       );
 
       return;
     }
 
-    const minusButton =
+    const minus =
       event.target.closest(
         "[data-cart-minus]"
       );
 
-    if (minusButton) {
+    if (minus) {
 
-      changeQuantity(
-        minusButton.dataset.cartMinus,
+      changeCartQuantity(
+        minus.dataset.cartMinus,
         -1
       );
 
       return;
     }
 
+    const remove =
+      event.target.closest(
+        "[data-cart-remove]"
+      );
+
+    if (remove) {
+
+      cart =
+        cart.filter(
+          item =>
+            String(item.id) !==
+            String(
+              remove.dataset.cartRemove
+            )
+        );
+
+      saveCart();
+      renderCart();
+
+      return;
+    }
+
     const cartButton =
       event.target.closest(
-        "#cart-open, [data-cart-open], .cart-trigger, .cart-button"
+        ".cart-trigger, #cart-open, [data-cart-open], [data-cart]"
       );
 
     if (cartButton) {
@@ -614,35 +905,11 @@ document.addEventListener(
 
       return;
     }
-
-    const closeButton =
-      event.target.closest(
-        "#cart-close, .cart-overlay"
-      );
-
-    if (closeButton) {
-
-      event.preventDefault();
-
-      closeCart();
-
-      return;
-    }
-
-    const continueButton =
-      event.target.closest(
-        "#continue-shopping"
-      );
-
-    if (continueButton) {
-      closeCart();
-    }
-
   }
 );
 
 /* =========================================================
-   BUY CART ON WHATSAPP
+   WHATSAPP CART ORDER
 ========================================================= */
 
 function sendCartToWhatsApp() {
@@ -650,7 +917,7 @@ function sendCartToWhatsApp() {
   if (!cart.length) {
 
     showToast(
-      "Your cart is empty. Add a watch first."
+      "Please add a watch first."
     );
 
     return;
@@ -659,51 +926,46 @@ function sendCartToWhatsApp() {
   let message =
 `Hello VECTORA 👋
 
-I would like to enquire/order these watches:
+I want to order / enquire about these watches:
 
 `;
 
   cart.forEach(
     (item, index) => {
 
+      const product =
+        getProduct(item.id);
+
+      if (!product) return;
+
       const imageUrl =
-        getProductImageUrl(
-          item.image
-        );
+        new URL(
+          product.image,
+          window.location.href
+        ).href;
 
       message +=
-`${index + 1}. ${item.name}
+`${index + 1}. ${product.name}
 Quantity: ${item.quantity}
-Price: ${item.price}
-Product image: ${imageUrl}
+Price: ${product.price
+  ? `Rs. ${product.price}`
+  : "Price on request"}
+Image: ${imageUrl}
 
 `;
     }
   );
 
-  const total =
-    cart.reduce(
-      (sum, item) =>
-        sum +
-        numericPrice(item.price) *
-        Number(item.quantity || 0),
-      0
-    );
-
   message +=
 `----------------------------
 
-Estimated total:
-${total > 0
-  ? `Rs. ${total.toLocaleString()}`
-  : "Price on request"}
+Please tell me:
 
-Please confirm:
-
+• Latest price
+• Best price / bargaining price
 • Availability
-• Final price
-• Best/bargain price
-• Delivery details
+• Delivery charges
+• Delivery time
 
 Email:
 ${STORE_EMAIL}
@@ -711,7 +973,9 @@ ${STORE_EMAIL}
 Thank you.`;
 
   const url =
-    whatsappUrl(message);
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${
+      encodeURIComponent(message)
+    }`;
 
   window.open(
     url,
@@ -720,108 +984,56 @@ Thank you.`;
   );
 }
 
-/* IMPORTANT:
-   HTML uses #cart-whatsapp
-*/
-
-cartWhatsapp?.addEventListener(
-  "click",
-  sendCartToWhatsApp
-);
-
 /* =========================================================
-   PRODUCT GRID
+   PRODUCT RENDER
 ========================================================= */
 
 function renderProducts(
   filter = "all"
 ) {
 
-  if (!productGrid) {
-    return;
-  }
-
-  const allProducts =
-    getProducts();
-
-  if (!allProducts.length) {
-    return;
-  }
+  if (!productGrid) return;
 
   const list =
     filter === "all"
-      ? allProducts
-      : allProducts.filter(
+      ? products
+      : products.filter(
           product =>
-            product.category === filter
+            product.category ===
+            filter
         );
 
   productGrid.innerHTML =
-    list.map(product => {
-
-      const id =
-        escapeHTML(
-          String(product.id)
-        );
-
-      const name =
-        escapeHTML(
-          product.name || "Watch"
-        );
-
-      const short =
-        escapeHTML(
-          product.short || ""
-        );
-
-      const image =
-        escapeHTML(
-          product.image || ""
-        );
-
-      const price =
-        escapeHTML(
-          getProductPrice(product)
-        );
-
-      const category =
-        escapeHTML(
-          product.categoryLabel ||
-          product.category ||
-          "Watch"
-        );
-
-      /*
-        IMPORTANT:
-        We do NOT put a button inside a button.
-      */
-
-      return `
+    list.map(
+      product => `
         <article
           class="product-card reveal"
-          data-product="${id}"
+          data-tilt
         >
 
           <button
             type="button"
             class="product-card-button open-product"
-            data-product="${id}"
-            aria-label="View ${name}"
+            data-product="${product.id}"
+            aria-label="View ${product.name}"
           >
 
             <span class="product-image">
 
               <img
-                src="${image}"
-                alt="${name}"
+                src="${product.image}"
+                alt="${product.name}: ${product.short}"
                 loading="lazy"
-              >
+              />
 
               <span class="product-tag">
-                ${category}
+                ${product.categoryLabel}
               </span>
 
-              <span class="product-arrow">
+              <span
+                class="product-arrow"
+                aria-hidden="true"
+              >
                 ↗
               </span>
 
@@ -830,24 +1042,20 @@ function renderProducts(
             <span class="product-info">
 
               <span>
+                <h3>
+                  ${product.name}
+                </h3>
 
-                <span class="product-name">
-                  ${name}
-                </span>
-
-                <span class="product-description">
-                  ${short}
-                </span>
-
+                <p>
+                  ${product.short}
+                </p>
               </span>
 
-              <span class="product-price-box">
-
-                <span class="product-price">
-                  Rs. ${price}
-                </span>
-
-              </span>
+              <p class="product-price">
+                ${product.price
+                  ? `Rs. ${product.price}`
+                  : `Price<br>on request`}
+              </p>
 
             </span>
 
@@ -856,37 +1064,26 @@ function renderProducts(
           <button
             type="button"
             class="add-cart-small"
-            data-add-cart="${id}"
-            aria-label="Add ${name} to cart"
+            data-add-cart="${product.id}"
           >
-            Add to Cart
+            ADD TO CART
           </button>
 
         </article>
-      `;
+      `
+    ).join("");
 
-    }).join("");
-
-  requestAnimationFrame(
-    initRevealAnimations
-  );
+  startRevealObserver();
+  setupTilt();
 }
 
 /* =========================================================
    PRODUCT MODAL
 ========================================================= */
 
-function openProductModal(
-  product
-) {
+function openModal(product) {
 
-  if (
-    !product ||
-    !productModal ||
-    !modalBody
-  ) {
-    return;
-  }
+  if (!product) return;
 
   activeProduct =
     product;
@@ -894,70 +1091,28 @@ function openProductModal(
   lastFocus =
     document.activeElement;
 
-  const name =
-    escapeHTML(
-      product.name || "Watch"
-    );
-
-  const image =
-    escapeHTML(
-      product.image || ""
-    );
-
-  const price =
-    escapeHTML(
-      getProductPrice(product)
-    );
-
-  const description =
-    escapeHTML(
-      product.description ||
-      product.short ||
-      ""
-    );
-
-  const category =
-    escapeHTML(
-      product.categoryLabel ||
-      product.category ||
-      "Timepiece"
-    );
-
-  const palette =
-    escapeHTML(
-      product.palette ||
-      "Premium"
-    );
-
-  const style =
-    escapeHTML(
-      product.style ||
-      category
-    );
-
   const imageUrl =
-    getProductImageUrl(
-      product.image
-    );
+    new URL(
+      product.image,
+      window.location.href
+    ).href;
 
   const message =
 `Hello VECTORA 👋
 
-I am interested in this watch:
+I am interested in:
 
 ${product.name}
 
 Price:
-${getProductPrice(product)}
+${product.price
+  ? `Rs. ${product.price}`
+  : "Price on request"}
 
 Product image:
 ${imageUrl}
 
-Please tell me:
-• Availability
-• Latest price
-• Best/bargain price
-• Delivery details`;
+Please tell me the latest price and best price.`;
 
   modalBody.innerHTML = `
 
@@ -966,9 +1121,9 @@ Please tell me:
       <div class="modal-product-gallery">
 
         <img
-          src="${image}"
-          alt="${name}"
-        >
+          src="${product.image}"
+          alt="${product.name}: ${product.short}"
+        />
 
       </div>
 
@@ -976,15 +1131,15 @@ Please tell me:
 
         <p class="eyebrow">
           <span></span>
-          ${category}
+          ${product.categoryLabel}
         </p>
 
         <h2 id="modal-title">
-          ${name}
+          ${product.name}
         </h2>
 
         <p>
-          ${description}
+          ${product.description}
         </p>
 
         <div class="modal-details">
@@ -992,45 +1147,49 @@ Please tell me:
           <span>
             <b>Palette</b>
             <strong>
-              ${palette}
+              ${product.palette}
             </strong>
           </span>
 
           <span>
             <b>Style</b>
             <strong>
-              ${style}
+              ${product.notes}
             </strong>
           </span>
 
           <span>
             <b>Price</b>
             <strong>
-              Rs. ${price}
+              ${product.price
+                ? `Rs. ${product.price}`
+                : "On request"}
             </strong>
           </span>
 
         </div>
 
-        <div class="modal-actions">
+        <div
+          style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+          "
+        >
 
           <button
             type="button"
             class="button button-gold"
-            data-modal-cart="${escapeHTML(
-              String(product.id)
-            )}"
+            data-modal-cart="${product.id}"
           >
             Add to Cart
           </button>
 
           <a
-            class="button button-outline"
-            href="${whatsappUrl(
-              message
-            )}"
+            class="button button-gold"
+            href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
           >
             Ask on WhatsApp ↗
           </a>
@@ -1055,82 +1214,43 @@ Please tell me:
     "modal-open"
   );
 
-  setTimeout(() => {
-
-    $(".modal-close", productModal)
-      ?.focus();
-
-  }, 50);
+  window.setTimeout(
+    () => {
+      $(".modal-close", productModal)
+        ?.focus();
+    },
+    20
+  );
 }
 
 /* =========================================================
-   PRODUCT CLICK
+   MODAL CART BUTTON
 ========================================================= */
 
 document.addEventListener(
   "click",
   event => {
 
-    const modalCart =
+    const button =
       event.target.closest(
         "[data-modal-cart]"
       );
 
-    if (modalCart) {
+    if (!button) return;
 
-      const product =
-        getProducts().find(
-          item =>
-            String(item.id) ===
-            String(
-              modalCart.dataset.modalCart
-            )
-        );
-
-      if (product) {
-        addToCart(product);
-      }
-
-      return;
-    }
-
-    const productButton =
-      event.target.closest(
-        ".open-product"
-      );
-
-    if (!productButton) {
-      return;
-    }
-
-    const id =
-      productButton.dataset.product;
-
-    const product =
-      getProducts().find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-    if (product) {
-      openProductModal(product);
-    }
-
+    addToCart(
+      button.dataset.modalCart
+    );
   }
 );
 
 /* =========================================================
-   CLOSE PRODUCT MODAL
+   CLOSE MODAL
 ========================================================= */
 
-function closeModal(
-  modal
-) {
+function closeModal(modal) {
 
-  if (!modal) {
-    return;
-  }
+  if (!modal) return;
 
   modal.classList.remove(
     "is-open"
@@ -1145,130 +1265,16 @@ function closeModal(
     "modal-open"
   );
 
-  if (
-    lastFocus &&
-    typeof lastFocus.focus ===
-      "function"
-  ) {
+  if (lastFocus) {
 
-    lastFocus.focus();
+    window.setTimeout(
+      () => {
+        lastFocus.focus();
+      },
+      50
+    );
   }
 }
-
-document.addEventListener(
-  "click",
-  event => {
-
-    const close =
-      event.target.closest(
-        "[data-close-modal], [data-close-image]"
-      );
-
-    if (close) {
-
-      const modal =
-        close.closest(".modal");
-
-      closeModal(modal);
-
-      return;
-    }
-
-    const modalClose =
-      event.target.closest(
-        ".modal-close"
-      );
-
-    if (modalClose) {
-
-      closeModal(
-        modalClose.closest(".modal")
-      );
-    }
-
-  }
-);
-
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key !== "Escape"
-    ) {
-      return;
-    }
-
-    if (
-      productModal?.classList.contains(
-        "is-open"
-      )
-    ) {
-
-      closeModal(
-        productModal
-      );
-    }
-
-    if (
-      imageModal?.classList.contains(
-        "is-open"
-      )
-    ) {
-
-      closeModal(
-        imageModal
-      );
-    }
-
-    if (
-      cartDrawer?.classList.contains(
-        "is-open"
-      )
-    ) {
-
-      closeCart();
-    }
-
-  }
-);
-
-/* =========================================================
-   PRODUCT FILTERS
-========================================================= */
-
-$$(".filter").forEach(
-  button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        $$(".filter").forEach(
-          item =>
-            item.classList.remove(
-              "active"
-            )
-        );
-
-        button.classList.add(
-          "active"
-        );
-
-        renderProducts(
-          button.dataset.filter ||
-          "all"
-        );
-
-      }
-    );
-
-  }
-);
 
 /* =========================================================
    GALLERY
@@ -1276,52 +1282,28 @@ $$(".filter").forEach(
 
 function renderGallery() {
 
-  if (
-    !galleryGrid
-  ) {
-    return;
-  }
-
-  const images =
-    getArchive();
-
-  if (!images.length) {
-    return;
-  }
+  if (!galleryGrid) return;
 
   galleryGrid.innerHTML =
-    images.map(
-      (image, index) => {
+    archive.map(
+      (image, index) => `
 
-        const src =
-          escapeHTML(
-            image.src || ""
-          );
+        <button
+          class="gallery-item"
+          type="button"
+          data-gallery-index="${index}"
+          aria-label="Open image ${index + 1} of ${archive.length}: ${image.alt}"
+        >
 
-        const alt =
-          escapeHTML(
-            image.alt ||
-            `Watch image ${index + 1}`
-          );
+          <img
+            src="${image.src}"
+            alt="${image.alt}"
+            loading="lazy"
+          />
 
-        return `
-          <button
-            class="gallery-item"
-            type="button"
-            data-gallery-index="${index}"
-            aria-label="Open image ${index + 1}"
-          >
+        </button>
 
-            <img
-              src="${src}"
-              alt="${alt}"
-              loading="lazy"
-            >
-
-          </button>
-        `;
-
-      }
+      `
     ).join("");
 }
 
@@ -1329,40 +1311,32 @@ function renderGallery() {
    LIGHTBOX
 ========================================================= */
 
-function openLightbox(
-  index
-) {
+function showLightbox(index) {
 
-  const images =
-    getArchive();
-
-  if (
-    !imageModal ||
-    !images[index]
-  ) {
-    return;
-  }
+  if (!archive.length) return;
 
   lightboxIndex =
-    index;
+    (index + archive.length) %
+    archive.length;
 
   const image =
-    images[index];
+    archive[lightboxIndex];
 
-  if (lightboxImage) {
+  lastFocus =
+    document.activeElement;
 
-    lightboxImage.src =
-      image.src || "";
+  lightboxImage.src =
+    image.src;
 
-    lightboxImage.alt =
-      image.alt || "";
-  }
+  lightboxImage.alt =
+    image.alt;
 
-  if (lightboxCount) {
-
-    lightboxCount.textContent =
-      `${index + 1} / ${images.length}`;
-  }
+  lightboxCount.textContent =
+    `${String(
+      lightboxIndex + 1
+    ).padStart(2, "0")} / ${String(
+      archive.length
+    ).padStart(2, "0")}`;
 
   imageModal.classList.add(
     "is-open"
@@ -1376,134 +1350,143 @@ function openLightbox(
   document.body.classList.add(
     "modal-open"
   );
+
+  window.setTimeout(
+    () => {
+      $(".modal-close", imageModal)
+        ?.focus();
+    },
+    20
+  );
+}
+
+function shiftLightbox(
+  amount
+) {
+
+  showLightbox(
+    lightboxIndex + amount
+  );
 }
 
 /* =========================================================
-   GALLERY CLICK
+   GENERAL CLICK HANDLER
 ========================================================= */
 
-document.addEventListener(
-  "click",
-  event => {
+function handleClick(event) {
 
-    const button =
-      event.target.closest(
-        "[data-gallery-index]"
-      );
+  const productButton =
+    event.target.closest(
+      ".open-product"
+    );
 
-    if (!button) {
-      return;
-    }
+  if (productButton) {
 
-    openLightbox(
-      Number(
-        button.dataset.galleryIndex
+    openModal(
+      products.find(
+        product =>
+          product.id ===
+          productButton.dataset.product
       )
     );
-  }
-);
 
-/* =========================================================
-   GALLERY NEXT / PREVIOUS
-========================================================= */
-
-function changeLightbox(
-  direction
-) {
-
-  const images =
-    getArchive();
-
-  if (!images.length) {
     return;
   }
 
-  lightboxIndex =
-    (
-      lightboxIndex +
-      direction +
-      images.length
-    ) % images.length;
+  const galleryButton =
+    event.target.closest(
+      ".gallery-item"
+    );
 
-  openLightbox(
-    lightboxIndex
-  );
+  if (galleryButton) {
+
+    showLightbox(
+      Number(
+        galleryButton.dataset.galleryIndex
+      )
+    );
+  }
 }
 
-/*
-   IMPORTANT:
-   Your HTML uses .gallery-next and
-   .gallery-prev.
-*/
-
-$(".gallery-next")
-  ?.addEventListener(
-    "click",
-    () => changeLightbox(1)
-  );
-
-$(".gallery-prev")
-  ?.addEventListener(
-    "click",
-    () => changeLightbox(-1)
-  );
+document.addEventListener(
+  "click",
+  handleClick
+);
 
 /* =========================================================
-   GALLERY KEYBOARD
+   FOCUS TRAP
 ========================================================= */
 
-document.addEventListener(
-  "keydown",
-  event => {
+function trapFocus(event) {
 
-    if (
-      !imageModal?.classList.contains(
-        "is-open"
-      )
-    ) {
-      return;
-    }
+  const openModalEl =
+    $(".modal.is-open");
 
-    if (
-      event.key ===
-      "ArrowRight"
-    ) {
-
-      changeLightbox(1);
-    }
-
-    if (
-      event.key ===
-      "ArrowLeft"
-    ) {
-
-      changeLightbox(-1);
-    }
-
+  if (
+    !openModalEl ||
+    event.key !== "Tab"
+  ) {
+    return;
   }
-);
+
+  const focusable =
+    $$(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+      openModalEl
+    ).filter(
+      element =>
+        element.offsetParent !== null
+    );
+
+  if (!focusable.length) return;
+
+  const first =
+    focusable[0];
+
+  const last =
+    focusable[
+      focusable.length - 1
+    ];
+
+  if (
+    event.shiftKey &&
+    document.activeElement ===
+      first
+  ) {
+
+    event.preventDefault();
+
+    last.focus();
+
+  } else if (
+    !event.shiftKey &&
+    document.activeElement ===
+      last
+  ) {
+
+    event.preventDefault();
+
+    first.focus();
+  }
+}
 
 /* =========================================================
    SCROLL REVEAL
 ========================================================= */
 
-function initRevealAnimations() {
+function startRevealObserver() {
 
-  const elements =
-    $$(".reveal:not(.revealed)");
-
-  if (!elements.length) {
-    return;
-  }
+  const items =
+    $$(".reveal");
 
   if (
     !("IntersectionObserver" in window)
   ) {
 
-    elements.forEach(
-      element =>
-        element.classList.add(
-          "revealed"
+    items.forEach(
+      item =>
+        item.classList.add(
+          "in-view"
         )
     );
 
@@ -1518,669 +1501,45 @@ function initRevealAnimations() {
           entry => {
 
             if (
-              !entry.isIntersecting
+              entry.isIntersecting
             ) {
-              return;
+
+              entry.target.classList.add(
+                "in-view"
+              );
+
+              observer.unobserve(
+                entry.target
+              );
             }
-
-            entry.target.classList.add(
-              "revealed"
-            );
-
-            observer.unobserve(
-              entry.target
-            );
-
           }
         );
 
       },
       {
-        threshold: 0.12,
+        threshold: .12,
         rootMargin:
-          "0px 0px -50px 0px"
+          "0px 0px -35px"
       }
     );
 
-  elements.forEach(
-    element =>
-      observer.observe(
-        element
-      )
+  items.forEach(
+    item =>
+      observer.observe(item)
   );
 }
 
 /* =========================================================
-   SCROLL PROGRESS
+   VIDEO OBSERVER
 ========================================================= */
 
-function updateScrollProgress() {
-
-  const documentHeight =
-    document.documentElement
-      .scrollHeight;
-
-  const viewportHeight =
-    window.innerHeight;
-
-  const scrollable =
-    documentHeight -
-    viewportHeight;
-
-  const progress =
-    scrollable > 0
-      ? (window.scrollY /
-          scrollable) *
-        100
-      : 0;
-
-  document.documentElement.style
-    .setProperty(
-      "--scroll-progress",
-      `${progress}%`
-    );
-}
-
-/* =========================================================
-   HEADER SCROLL
-========================================================= */
-
-function initHeaderScroll() {
-
-  const headers =
-    $$(
-      ".site-header, header"
-    );
-
-  if (!headers.length) {
-    return;
-  }
-
-  const update =
-    () => {
-
-      const scrolled =
-        window.scrollY > 40;
-
-      headers.forEach(
-        header =>
-          header.classList.toggle(
-            "scrolled",
-            scrolled
-          )
-      );
-    };
-
-  window.addEventListener(
-    "scroll",
-    update,
-    { passive: true }
-  );
-
-  update();
-}
-
-/* =========================================================
-   BACK TO TOP
-========================================================= */
-
-function initBackToTop() {
-
-  if (!backToTop) {
-    return;
-  }
-
-  window.addEventListener(
-    "scroll",
-    () => {
-
-      backToTop.classList.toggle(
-        "is-visible",
-        window.scrollY > 600
-      );
-
-    },
-    { passive: true }
-  );
-
-  backToTop.addEventListener(
-    "click",
-    () => {
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }
-  );
-}
-
-/* =========================================================
-   VELOCITY ROWS
-========================================================= */
-
-function initVelocityRows() {
-
-  const rows =
-    $$("[data-velocity-row]");
-
-  if (!rows.length) {
-    return;
-  }
-
-  let ticking = false;
-
-  function update() {
-
-    rows.forEach(
-      row => {
-
-        const rect =
-          row.getBoundingClientRect();
-
-        const distance =
-          Number(
-            row.dataset.distance ||
-            -250
-          );
-
-        const direction =
-          Number(
-            row.dataset.direction ||
-            1
-          );
-
-        const center =
-          window.innerHeight / 2;
-
-        const rowCenter =
-          rect.top +
-          rect.height / 2;
-
-        const progress =
-          (rowCenter - center) /
-          window.innerHeight;
-
-        const movement =
-          progress *
-          distance *
-          direction;
-
-        row.style.transform =
-          `translate3d(
-            ${movement}px,
-            0,
-            0
-          )`;
-      }
-    );
-
-    ticking = false;
-  }
-
-  function requestUpdate() {
-
-    if (ticking) {
-      return;
-    }
-
-    ticking = true;
-
-    requestAnimationFrame(
-      update
-    );
-  }
-
-  window.addEventListener(
-    "scroll",
-    requestUpdate,
-    { passive: true }
-  );
-
-  update();
-}
-
-/* =========================================================
-   PREMIUM CURSOR
-========================================================= */
-
-function initCursor() {
-
-  if (
-    window.matchMedia(
-      "(pointer: coarse)"
-    ).matches
-  ) {
-    return;
-  }
-
-  if (
-    $(".premium-cursor")
-  ) {
-    return;
-  }
-
-  const cursor =
-    document.createElement(
-      "div"
-    );
-
-  cursor.className =
-    "premium-cursor";
-
-  document.body.appendChild(
-    cursor
-  );
-
-  let mouseX = 0;
-  let mouseY = 0;
-
-  let currentX = 0;
-  let currentY = 0;
-
-  window.addEventListener(
-    "mousemove",
-    event => {
-
-      mouseX =
-        event.clientX;
-
-      mouseY =
-        event.clientY;
-
-    },
-    { passive: true }
-  );
-
-  function animate() {
-
-    currentX +=
-      (mouseX - currentX) *
-      0.16;
-
-    currentY +=
-      (mouseY - currentY) *
-      0.16;
-
-    cursor.style.transform =
-      `translate3d(
-        ${currentX}px,
-        ${currentY}px,
-        0
-      )`;
-
-    requestAnimationFrame(
-      animate
-    );
-  }
-
-  animate();
-
-  const interactive =
-    "a, button, input, textarea, select, .product-card";
-
-  document.addEventListener(
-    "mouseover",
-    event => {
-
-      if (
-        event.target.closest(
-          interactive
-        )
-      ) {
-
-        cursor.classList.add(
-          "cursor-hover"
-        );
-      }
-
-    }
-  );
-
-  document.addEventListener(
-    "mouseout",
-    event => {
-
-      if (
-        event.target.closest(
-          interactive
-        )
-      ) {
-
-        cursor.classList.remove(
-          "cursor-hover"
-        );
-      }
-
-    }
-  );
-}
-
-/* =========================================================
-   HERO PARALLAX
-========================================================= */
-
-function initHeroParallax() {
-
-  const hero =
-    $(".hero");
-
-  if (!hero) {
-    return;
-  }
-
-  if (
-    window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches
-  ) {
-    return;
-  }
-
-  let ticking = false;
-
-  function update() {
-
-    const scroll =
-      window.scrollY;
-
-    if (
-      scroll <
-      window.innerHeight
-    ) {
-
-      hero.style.setProperty(
-        "--hero-scroll",
-        `${scroll * 0.18}px`
-      );
-    }
-
-    ticking = false;
-  }
-
-  window.addEventListener(
-    "scroll",
-    () => {
-
-      if (ticking) {
-        return;
-      }
-
-      ticking = true;
-
-      requestAnimationFrame(
-        update
-      );
-
-    },
-    { passive: true }
-  );
-}
-
-/* =========================================================
-   IMAGE TILT
-========================================================= */
-
-function initImageTilt() {
-
-  if (
-    window.matchMedia(
-      "(pointer: coarse)"
-    ).matches
-  ) {
-    return;
-  }
-
-  let currentCard =
-    null;
-
-  document.addEventListener(
-    "mousemove",
-    event => {
-
-      const card =
-        event.target.closest(
-          ".product-card"
-        );
-
-      if (!card) {
-        return;
-      }
-
-      currentCard =
-        card;
-
-      const rect =
-        card.getBoundingClientRect();
-
-      const x =
-        (event.clientX -
-          rect.left) /
-        rect.width;
-
-      const y =
-        (event.clientY -
-          rect.top) /
-        rect.height;
-
-      const rotateY =
-        (x - 0.5) * 4;
-
-      const rotateX =
-        (0.5 - y) * 4;
-
-      card.style.transform =
-        `perspective(900px)
-         rotateX(${rotateX}deg)
-         rotateY(${rotateY}deg)
-         translateY(-4px)`;
-    },
-    { passive: true }
-  );
-
-  document.addEventListener(
-    "mouseout",
-    event => {
-
-      const card =
-        event.target.closest(
-          ".product-card"
-        );
-
-      if (!card) {
-        return;
-      }
-
-      card.style.transform =
-        "";
-    }
-  );
-}
-
-/* =========================================================
-   CONTACT FORM
-========================================================= */
-
-function initContactForm() {
-
-  const form =
-    $("#contact-form");
-
-  if (!form) {
-    return;
-  }
-
-  form.addEventListener(
-    "submit",
-    event => {
-
-      event.preventDefault();
-
-      const formData =
-        new FormData(form);
-
-      const name =
-        String(
-          formData.get("name") || ""
-        ).trim();
-
-      const phone =
-        String(
-          formData.get("phone") || ""
-        ).trim();
-
-      const interest =
-        String(
-          formData.get("interest") ||
-          ""
-        ).trim();
-
-      const message =
-        String(
-          formData.get("message") ||
-          ""
-        ).trim();
-
-      const whatsappMessage =
-`Hello VECTORA 👋
-
-New enquiry:
-
-Name:
-${name}
-
-Phone:
-${phone}
-
-Interested in:
-${interest}
-
-Message:
-${message}
-
-Email:
-${STORE_EMAIL}`;
-
-      window.open(
-        whatsappUrl(
-          whatsappMessage
-        ),
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-      form.reset();
-
-      showToast(
-        "Opening WhatsApp..."
-      );
-    }
-  );
-}
-
-/* =========================================================
-   EMAIL
-========================================================= */
-
-function updateEmails() {
-
-  $$(
-    'a[href^="mailto:"]'
-  ).forEach(
-    link => {
-
-      link.href =
-        `mailto:${STORE_EMAIL}`;
-
-      /*
-        Only replace visible email text.
-        Do not overwrite unrelated labels.
-      */
-
-      const text =
-        link.textContent.trim();
-
-      if (
-        text.includes("@")
-      ) {
-
-        link.textContent =
-          STORE_EMAIL;
-      }
-    }
-  );
-}
-
-/* =========================================================
-   PHONE / WHATSAPP LINKS
-========================================================= */
-
-function updateWhatsAppLinks() {
-
-  $$(
-    'a[href*="wa.me/"]'
-  ).forEach(
-    link => {
-
-      const href =
-        link.getAttribute(
-          "href"
-        );
-
-      if (!href) {
-        return;
-      }
-
-      try {
-
-        const url =
-          new URL(
-            href,
-            window.location.href
-          );
-
-        const oldText =
-          url.searchParams.get(
-            "text"
-          );
-
-        if (!oldText) {
-          return;
-        }
-
-        const newText =
-          oldText.replace(
-            /Time Extra/gi,
-            "VECTORA"
-          );
-
-        link.href =
-          whatsappUrl(
-            newText
-          );
-
-      } catch {
-        // Ignore invalid URLs
-      }
-    }
-  );
-}
-
-/* =========================================================
-   VIDEOS
-========================================================= */
-
-function initVideos() {
+function startVideoObserver() {
 
   const videos =
-    $$("video");
-
-  if (!videos.length) {
-    return;
-  }
+    $$(".reel-card video");
 
   if (
+    !videos.length ||
     !("IntersectionObserver" in window)
   ) {
     return;
@@ -2215,122 +1574,501 @@ function initVideos() {
 
       },
       {
-        threshold: 0.15
+        threshold: .55
       }
     );
 
   videos.forEach(
     video =>
-      observer.observe(
-        video
-      )
+      observer.observe(video)
   );
 }
 
 /* =========================================================
-   YEAR
+   TILT
 ========================================================= */
 
-function updateYear() {
+function setupTilt() {
 
-  const year =
-    $("#year");
-
-  if (year) {
-    year.textContent =
-      new Date().getFullYear();
-  }
-}
-
-/* =========================================================
-   MOBILE PERFORMANCE
-========================================================= */
-
-function optimizeMobile() {
-
-  const mobile =
-    window.matchMedia(
-      "(max-width: 768px)"
-    ).matches;
-
-  document.documentElement
-    .classList.toggle(
-      "mobile-device",
-      mobile
-    );
-
-  if (!mobile) {
+  if (
+    !window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches
+  ) {
     return;
   }
 
-  $$("video").forEach(
-    video => {
+  $$("[data-tilt]").forEach(
+    card => {
 
       if (
-        !video.hasAttribute(
-          "data-keep-preload"
-        )
+        card.dataset.tiltReady
       ) {
-
-        video.setAttribute(
-          "preload",
-          "none"
-        );
+        return;
       }
+
+      card.dataset.tiltReady =
+        "true";
+
+      card.addEventListener(
+        "pointermove",
+        event => {
+
+          const rect =
+            card.getBoundingClientRect();
+
+          const x =
+            (event.clientX -
+              rect.left) /
+              rect.width -
+            .5;
+
+          const y =
+            (event.clientY -
+              rect.top) /
+              rect.height -
+            .5;
+
+          const rotateX =
+            (-y * 5).toFixed(2);
+
+          const rotateY =
+            (x * 5).toFixed(2);
+
+          if (
+            card.classList.contains(
+              "hero-product"
+            )
+          ) {
+
+            card.style.transform =
+              `translateY(-44%)
+               rotate(-4deg)
+               perspective(1100px)
+               rotateX(${rotateX}deg)
+               rotateY(${rotateY}deg)`;
+
+          } else {
+
+            card.style.transform =
+              `perspective(900px)
+               rotateY(${-10 +
+                 Number(rotateY)}deg)
+               rotateZ(-2deg)
+               rotateX(${rotateX}deg)`;
+          }
+
+        }
+      );
+
+      card.addEventListener(
+        "pointerleave",
+        () => {
+          card.style.transform =
+            "";
+        }
+      );
 
     }
   );
 }
 
 /* =========================================================
-   INITIALIZE
+   HEADER
 ========================================================= */
 
-function initVectora() {
+function setupHeader() {
 
-  renderProducts(
-    "all"
+  const header =
+    $(".site-header");
+
+  const menuButton =
+    $(".menu-toggle");
+
+  const nav =
+    $(".site-nav");
+
+  if (
+    !header ||
+    !menuButton ||
+    !nav
+  ) {
+    return;
+  }
+
+  const navLabel =
+    $(".sr-only", menuButton);
+
+  const updateHeader =
+    () => {
+
+      header.classList.toggle(
+        "is-scrolled",
+        window.scrollY > 28
+      );
+    };
+
+  updateHeader();
+
+  window.addEventListener(
+    "scroll",
+    updateHeader,
+    {
+      passive: true
+    }
   );
 
-  renderGallery();
+  menuButton.addEventListener(
+    "click",
+    () => {
 
-  renderCart();
+      const isOpen =
+        nav.classList.toggle(
+          "is-open"
+        );
 
-  updateCartUI();
+      menuButton.classList.toggle(
+        "is-open",
+        isOpen
+      );
 
-  updateYear();
+      menuButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
 
-  updateEmails();
+      if (navLabel) {
 
-  updateWhatsAppLinks();
+        navLabel.textContent =
+          isOpen
+            ? "Close navigation"
+            : "Open navigation";
+      }
+    }
+  );
 
-  initRevealAnimations();
+  $$("a", nav).forEach(
+    link => {
 
-  initVelocityRows();
+      link.addEventListener(
+        "click",
+        () => {
 
-  initCursor();
+          nav.classList.remove(
+            "is-open"
+          );
 
-  initHeroParallax();
+          menuButton.classList.remove(
+            "is-open"
+          );
 
-  initImageTilt();
+          menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+          );
 
-  initContactForm();
+          if (navLabel) {
 
-  initVideos();
+            navLabel.textContent =
+              "Open navigation";
+          }
+        }
+      );
+    }
+  );
+}
 
-  initHeaderScroll();
+/* =========================================================
+   CURSOR
+========================================================= */
 
-  initBackToTop();
+function setupCursorGlow() {
 
-  optimizeMobile();
+  const glow =
+    $(".cursor-glow");
 
-  updateScrollProgress();
+  if (
+    !glow ||
+    !window.matchMedia(
+      "(hover: hover)"
+    ).matches
+  ) {
+    return;
+  }
 
-  /* -------------------------------------------------------
-     Cart button fallback
-  ------------------------------------------------------- */
+  document.addEventListener(
+    "pointermove",
+    event => {
 
-  $$(".cart-trigger, [data-cart-open]").forEach(
+      glow.style.left =
+        `${event.clientX}px`;
+
+      glow.style.top =
+        `${event.clientY}px`;
+
+    },
+    {
+      passive: true
+    }
+  );
+}
+
+/* =========================================================
+   VELOCITY GALLERY
+========================================================= */
+
+function setupVelocityGallery() {
+
+  const stage =
+    $("#velocity-stage");
+
+  const rows =
+    $$("[data-velocity-row]");
+
+  const reducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+  if (
+    !stage ||
+    !rows.length ||
+    reducedMotion
+  ) {
+    return;
+  }
+
+  let lastScroll =
+    window.scrollY;
+
+  let velocity = 0;
+
+  let stageVisible =
+    false;
+
+  const clamp =
+    (value, min, max) =>
+      Math.min(
+        Math.max(value, min),
+        max
+      );
+
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        stageVisible =
+          entries[0].isIntersecting;
+
+      },
+      {
+        threshold: 0
+      }
+    );
+
+  observer.observe(stage);
+
+  window.addEventListener(
+    "scroll",
+    () => {
+
+      const currentScroll =
+        window.scrollY;
+
+      velocity =
+        clamp(
+          velocity +
+            (currentScroll -
+              lastScroll) *
+            .18,
+          -95,
+          95
+        );
+
+      lastScroll =
+        currentScroll;
+
+    },
+    {
+      passive: true
+    }
+  );
+
+  const animate =
+    () => {
+
+      if (stageVisible) {
+
+        const rect =
+          stage.getBoundingClientRect();
+
+        const journey =
+          clamp(
+            (
+              window.innerHeight -
+              rect.top
+            ) /
+              (
+                window.innerHeight +
+                rect.height
+              ),
+            0,
+            1
+          );
+
+        rows.forEach(
+          row => {
+
+            const base =
+              Number(
+                row.dataset.distance
+              ) *
+              (journey - .5);
+
+            const direction =
+              Number(
+                row.dataset.direction
+              );
+
+            const linkedOffset =
+              velocity *
+              direction *
+              .82;
+
+            row.style.transform =
+              `translate3d(
+                ${base + linkedOffset}px,
+                0,
+                0
+              )`;
+          }
+        );
+      }
+
+      velocity *= .9;
+
+      window.requestAnimationFrame(
+        animate
+      );
+    };
+
+  window.requestAnimationFrame(
+    animate
+  );
+}
+
+/* =========================================================
+   CONTACT FORM
+========================================================= */
+
+function setupForm() {
+
+  const form =
+    $("#contact-form");
+
+  if (!form) return;
+
+  form.addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+      const formData =
+        new FormData(form);
+
+      const name =
+        String(
+          formData.get("name") || ""
+        ).trim();
+
+      const phone =
+        String(
+          formData.get("phone") || ""
+        ).trim();
+
+      const interest =
+        String(
+          formData.get("interest") ||
+          ""
+        );
+
+      const message =
+        String(
+          formData.get("message") ||
+          ""
+        ).trim();
+
+      const body =
+`Hello VECTORA 👋
+
+Name:
+${name}
+
+Phone:
+${phone}
+
+Interest:
+${interest}
+
+Message:
+${message || "Not specified"}
+
+Email:
+${STORE_EMAIL}`;
+
+      window.open(
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${
+          encodeURIComponent(body)
+        }`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+      showToast(
+        "Opening WhatsApp..."
+      );
+
+      form.reset();
+    }
+  );
+}
+
+/* =========================================================
+   EMAIL UPDATE
+========================================================= */
+
+function updateEmailLinks() {
+
+  $$(
+    'a[href^="mailto:"]'
+  ).forEach(
+    link => {
+
+      link.href =
+        `mailto:${STORE_EMAIL}`;
+
+      if (
+        link.textContent.includes("@")
+      ) {
+
+        link.textContent =
+          STORE_EMAIL;
+      }
+    }
+  );
+}
+
+/* =========================================================
+   CART BUTTON
+========================================================= */
+
+function setupCartButton() {
+
+  const possibleButtons =
+    $$(".cart-trigger, #cart-open, [data-cart-open], [data-cart]");
+
+  possibleButtons.forEach(
     button => {
 
       button.addEventListener(
@@ -2347,65 +2085,185 @@ function initVectora() {
 }
 
 /* =========================================================
-   GLOBAL SCROLL
+   FILTERS
 ========================================================= */
 
-let scrollTicking = false;
+function setupFilters() {
 
-window.addEventListener(
-  "scroll",
-  () => {
+  $$(".filter").forEach(
+    button => {
 
-    if (scrollTicking) {
-      return;
+      button.addEventListener(
+        "click",
+        () => {
+
+          $$(".filter").forEach(
+            item =>
+              item.classList.toggle(
+                "active",
+                item === button
+              )
+          );
+
+          renderProducts(
+            button.dataset.filter
+          );
+        }
+      );
+    }
+  );
+}
+
+/* =========================================================
+   CLOSE BUTTONS
+========================================================= */
+
+function setupModalButtons() {
+
+  $$("[data-close-modal]")
+    .forEach(
+      button =>
+        button.addEventListener(
+          "click",
+          () =>
+            closeModal(
+              productModal
+            )
+        )
+    );
+
+  $$("[data-close-image]")
+    .forEach(
+      button =>
+        button.addEventListener(
+          "click",
+          () =>
+            closeModal(
+              imageModal
+            )
+        )
+    );
+
+  $(".gallery-prev")
+    ?.addEventListener(
+      "click",
+      () =>
+        shiftLightbox(-1)
+    );
+
+  $(".gallery-next")
+    ?.addEventListener(
+      "click",
+      () =>
+        shiftLightbox(1)
+    );
+}
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      if (
+        productModal?.classList.contains(
+          "is-open"
+        )
+      ) {
+        closeModal(
+          productModal
+        );
+      }
+
+      if (
+        imageModal?.classList.contains(
+          "is-open"
+        )
+      ) {
+        closeModal(
+          imageModal
+        );
+      }
+
+      closeCart();
     }
 
-    scrollTicking = true;
+    if (
+      imageModal?.classList.contains(
+        "is-open"
+      )
+    ) {
 
-    requestAnimationFrame(
-      () => {
-
-        updateScrollProgress();
-
-        scrollTicking = false;
-
+      if (
+        event.key ===
+        "ArrowLeft"
+      ) {
+        shiftLightbox(-1);
       }
-    );
 
-  },
-  {
-    passive: true
+      if (
+        event.key ===
+        "ArrowRight"
+      ) {
+        shiftLightbox(1);
+      }
+    }
+
+    trapFocus(event);
   }
 );
 
 /* =========================================================
-   RESIZE
+   INITIALIZE
 ========================================================= */
 
-let resizeTimer;
+function initVectora() {
 
-window.addEventListener(
-  "resize",
-  () => {
+  createCartUI();
 
-    clearTimeout(
-      resizeTimer
-    );
+  renderProducts();
 
-    resizeTimer =
-      setTimeout(
-        optimizeMobile,
-        180
-      );
+  renderGallery();
 
-  },
-  {
-    passive: true
+  renderCart();
+
+  startRevealObserver();
+
+  startVideoObserver();
+
+  setupTilt();
+
+  setupHeader();
+
+  setupCursorGlow();
+
+  setupVelocityGallery();
+
+  setupForm();
+
+  setupCartButton();
+
+  setupFilters();
+
+  setupModalButtons();
+
+  updateEmailLinks();
+
+  if ($("#year")) {
+    $("#year").textContent =
+      new Date().getFullYear();
   }
-);
+}
 
 /* =========================================================
-   DOM READY
+   START
 ========================================================= */
 
 if (
