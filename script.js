@@ -1,221 +1,24 @@
-const products = [
-  {
-    id: "steel-signature",
-    category: "steel",
-    categoryLabel: "Steel edit",
-    name: "Steel Signature",
-    short: "White dial · polished steel",
-    image: "assets/steel-white.jpg",
-    description: "A bright, textured dial meets polished steel tones and a strong fluted-inspired profile. Made for a confident everyday rotation.",
-    palette: "Silver · White",
-    notes: "Statement steel"
-  },
-  {
-    id: "steel-noir",
-    category: "steel",
-    categoryLabel: "Steel edit",
-    name: "Steel Noir",
-    short: "Black dial · silver steel",
-    image: "assets/steel-black.jpg",
-    description: "A darker expression of the steel edit, with a graphic black dial and reflective bracelet detail for evening presence.",
-    palette: "Black · Silver",
-    notes: "Statement steel"
-  },
-  {
-    id: "chrono-noir",
-    category: "steel",
-    categoryLabel: "Sport edit",
-    name: "Chrono Noir",
-    short: "Black metal · bold dial",
-    image: "assets/black-chrono.jpg",
-    description: "An all-black chronograph-inspired look that brings a sharper, athletic edge to the collection.",
-    palette: "Black · Violet detail",
-    notes: "Sport statement"
-  },
-  {
-    id: "gold-day",
-    category: "steel",
-    categoryLabel: "Gold edit",
-    name: "Golden Day",
-    short: "Gold tone · white dial",
-    image: "assets/gold-day-watch.jpg",
-    description: "A luminous gold-tone finish and bright patterned dial create an unapologetically elevated wrist presence.",
-    palette: "Gold · White",
-    notes: "Celebration piece"
-  },
-  {
-    id: "gold-linear",
-    category: "rectangular",
-    categoryLabel: "Rectangular",
-    name: "Gold Linear",
-    short: "Gold tone · black dial",
-    image: "assets/gold-rectangular.jpg",
-    description: "A slim rectangular case with a sculptural, gold-tone bracelet—an expressive choice for dressier moments.",
-    palette: "Gold · Black",
-    notes: "Rectangular dress"
-  },
-  {
-    id: "silver-gold-line",
-    category: "rectangular",
-    categoryLabel: "Rectangular",
-    name: "Silver Gold Line",
-    short: "Two tone · white dial",
-    image: "assets/two-tone-rectangular.jpg",
-    description: "Silver and gold-tone details meet a crisp white Roman-numeral dial for a balanced, traditional expression.",
-    palette: "Silver · Gold · White",
-    notes: "Two-tone dress"
-  },
-  {
-    id: "emerald-gold",
-    category: "rectangular",
-    categoryLabel: "Rectangular",
-    name: "Emerald Gold",
-    short: "Gold tone · green dial",
-    image: "assets/green-gold-rectangular.jpg",
-    description: "Deep green and warm gold bring an unexpectedly rich colour story to a compact rectangular profile.",
-    palette: "Gold · Emerald",
-    notes: "Colour statement"
-  },
-  {
-    id: "burgundy-gold",
-    category: "rectangular",
-    categoryLabel: "Rectangular",
-    name: "Burgundy Gold",
-    short: "Gold tone · wine dial",
-    image: "assets/burgundy-gold-rectangular.jpg",
-    description: "A wine-toned dial framed in gold delivers vintage character with a confident contemporary finish.",
-    palette: "Gold · Burgundy",
-    notes: "Colour statement"
-  },
-  {
-    id: "ivory-two-tone",
-    category: "rectangular",
-    categoryLabel: "Rectangular",
-    name: "Ivory Two-Tone",
-    short: "Silver & gold · ivory dial",
-    image: "assets/two-tone-ivory-rectangular.jpg",
-    description: "Warm ivory, silver and gold create a versatile rectangular look with a quieter sense of luxury.",
-    palette: "Silver · Gold · Ivory",
-    notes: "Two-tone dress"
-  },
-  {
-    id: "square-slate",
-    category: "square",
-    categoryLabel: "Modern square",
-    name: "Square Slate",
-    short: "Matte black · steel strap",
-    image: "assets/square-black-matte.jpg",
-    description: "A clean square face and matte black profile make this a minimalist alternative to the traditional round watch.",
-    palette: "Black · Steel",
-    notes: "Modern square"
-  },
-  {
-    id: "square-ivory",
-    category: "square",
-    categoryLabel: "Modern square",
-    name: "Square Ivory",
-    short: "White dial · dark frame",
-    image: "assets/square-white-hand.jpg",
-    description: "Crisp white under a dark frame, keeping the geometry clean and the look easy to wear day to night.",
-    palette: "White · Black",
-    notes: "Modern square"
-  },
-  {
-    id: "square-taupe",
-    category: "square",
-    categoryLabel: "Modern square",
-    name: "Square Taupe",
-    short: "Taupe dial · silver tone",
-    image: "assets/square-taupe-hand.jpg",
-    description: "A softer neutral dial paired with a silver-tone case for a distinctly contemporary, pared-back feel.",
-    palette: "Taupe · Silver",
-    notes: "Modern square"
-  },
-  {
-    id: "classic-silver",
-    category: "classic",
-    categoryLabel: "Classic",
-    name: "Classic Silver",
-    short: "Silver steel · white dial",
-    image: "assets/classic-silver-glove.jpg",
-    description: "Crisp markers, polished steel and a white dial bring familiar dress-watch balance to a versatile daily piece.",
-    palette: "Silver · White",
-    notes: "Classic dress"
-  },
-  {
-    id: "heritage-leather",
-    category: "classic",
-    categoryLabel: "Classic",
-    name: "Heritage Leather",
-    short: "Brown leather · white dial",
-    image: "assets/classic-brown.jpg",
-    description: "A warm brown textured strap sets off a bright, diamond-accented dial for a formal, gift-ready option.",
-    palette: "Brown · White · Silver",
-    notes: "Classic dress"
-  },
-  {
-    id: "emerald-bangle",
-    category: "ladies",
-    categoryLabel: "Ladies",
-    name: "Emerald Bangle",
-    short: "Gold bangle · green dial",
-    image: "assets/ladies-green-bangle.jpg",
-    description: "An oval green dial, diamond-style frame and fine gold bangle shape make an elegant statement for special occasions.",
-    palette: "Gold · Emerald",
-    notes: "Ladies bangle"
-  },
-  {
-    id: "ice-bangle",
-    category: "ladies",
-    categoryLabel: "Ladies",
-    name: "Ice Bangle",
-    short: "Gold bangle · pale blue dial",
-    image: "assets/ladies-blue-bangle.jpg",
-    description: "A light blue oval dial framed in warm gold offers a softer, luminous take on the bangle-watch silhouette.",
-    palette: "Gold · Ice blue",
-    notes: "Ladies bangle"
-  }
-];
+/* =========================================================
+   VECTORA / TIME EXTRA — PREMIUM WATCH WEBSITE JS
+   ========================================================= */
 
-const archive = [
-  ["hero-steel-duo.jpg", "Two polished steel watches shown in a presentation box"],
-  ["steel-back.jpg", "Close view of a steel watch bracelet and back"],
-  ["steel-white.jpg", "White dial steel watch in a light presentation box"],
-  ["steel-collection.jpg", "Selection of black and white dial steel watches"],
-  ["steel-black.jpg", "Black dial steel watch in a dark presentation box"],
-  ["black-chrono.jpg", "Black chronograph-style watch collage"],
-  ["gold-rectangular.jpg", "Gold rectangular watch collection"],
-  ["two-tone-rectangular.jpg", "Silver and gold rectangular watch collection"],
-  ["gold-pearl-rectangular.jpg", "Gold rectangular watch with a bright dial"],
-  ["silver-black-rectangular.jpg", "Silver rectangular watch with dark Roman numeral dial"],
-  ["silver-white-rectangular.jpg", "Silver rectangular watch with white Roman numeral dial"],
-  ["green-gold-rectangular.jpg", "Green dial rectangular gold-tone watch"],
-  ["green-gold-alt.jpg", "Green dial gold-tone rectangular watch close-up"],
-  ["rose-steel-rectangular.jpg", "Rose-tone and silver rectangular watch"],
-  ["burgundy-gold-rectangular.jpg", "Burgundy dial rectangular gold-tone watch"],
-  ["two-tone-ivory-rectangular.jpg", "Ivory dial silver and gold rectangular watch"],
-  ["gold-day-watch.jpg", "Gold-tone watch with a bright patterned dial"],
-  ["square-silver-hand.jpg", "Square silver-tone watch held in hand"],
-  ["square-black-hand.jpg", "Square black dial watch held in hand"],
-  ["square-gold-hand.jpg", "Square gold dial watch held in hand"],
-  ["square-trio.jpg", "Three modern square watches on a display surface"],
-  ["square-black-silver.jpg", "Black square watch with silver-tone case"],
-  ["square-black-matte.jpg", "Matte black square watch held in hand"],
-  ["square-trio-bright.jpg", "Three square watches against a bright backdrop"],
-  ["square-trio-vertical.jpg", "Three modern square watches arranged vertically"],
-  ["square-white-hand.jpg", "White dial square watch held in hand"],
-  ["square-taupe-hand.jpg", "Taupe dial square watch held in hand"],
-  ["square-taupe-black.jpg", "Taupe dial square watch with black frame"],
-  ["classic-silver-glove.jpg", "Classic silver-tone watch held with a white glove"],
-  ["ladies-green-bangle.jpg", "Emerald green ladies bangle watch in a gift box"],
-  ["ladies-blue-bangle.jpg", "Light blue ladies bangle watch in a gift box"],
-  ["classic-brown.jpg", "Classic white dial watch with brown leather strap in its box"],
-  ["classic-black.jpg", "Classic black dial watch with a dark leather strap"],
-  ["time-extra-mark.jpg", "Time Extra gold and black watch-inspired mark"]
-].map(([file, alt]) => ({ src: `assets/${file}`, alt }));
+"use strict";
+
+/* =========================
+   CONFIG
+========================= */
+
+const WHATSAPP_NUMBER = "923328252059";
+const STORE_EMAIL = "Waqtora000@gmail.com";
+
+/* =========================
+   HELPERS
+========================= */
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
-const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+const $$ = (selector, scope = document) => [
+  ...scope.querySelectorAll(selector)
+];
 
 const productGrid = $("#product-grid");
 const galleryGrid = $("#gallery-grid");
@@ -230,126 +33,496 @@ let activeProduct = null;
 let lastFocus = null;
 let lightboxIndex = 0;
 
+let cart = JSON.parse(localStorage.getItem("vectora-cart") || "[]");
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function whatsappUrl(message) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message) {
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("is-visible");
+  }, 2500);
+}
+
+/* =========================
+   CART STORAGE
+========================= */
+
+function saveCart() {
+  localStorage.setItem("vectora-cart", JSON.stringify(cart));
+  updateCartUI();
+}
+
+function getCartCount() {
+  return cart.reduce((total, item) => total + item.quantity, 0);
+}
+
+function addToCart(product) {
+  if (!product) return;
+
+  const existing = cart.find(item => item.id === product.id);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price || "Price on request",
+      quantity: 1
+    });
+  }
+
+  saveCart();
+
+  showToast(`${product.name} cart میں شامل ہوگئی ✓`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  saveCart();
+}
+
+function changeQuantity(id, amount) {
+  const item = cart.find(product => product.id === id);
+
+  if (!item) return;
+
+  item.quantity += amount;
+
+  if (item.quantity <= 0) {
+    removeFromCart(id);
+    return;
+  }
+
+  saveCart();
+}
+
+/* =========================
+   CART UI
+========================= */
+
+function updateCartUI() {
+  const count = getCartCount();
+
+  $$(".cart-count").forEach(element => {
+    element.textContent = count;
+    element.classList.toggle("has-items", count > 0);
+  });
+
+  $("[data-cart-count]")?.setAttribute("data-cart-count", count);
+}
+
+function renderCart() {
+  const cartContainer = $("#cart-items");
+
+  if (!cartContainer) return;
+
+  if (!cart.length) {
+    cartContainer.innerHTML = `
+      <div class="empty-cart">
+        <span>◌</span>
+        <h3>Your cart is empty</h3>
+        <p>Select your favourite timepiece to continue.</p>
+      </div>
+    `;
+
+    updateCartTotal();
+    return;
+  }
+
+  cartContainer.innerHTML = cart.map(item => `
+    <article class="cart-item">
+
+      <div class="cart-item-image">
+        <img
+          src="${item.image}"
+          alt="${item.name}"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="cart-item-info">
+        <h4>${item.name}</h4>
+
+        <p class="cart-item-price">
+          ${item.price}
+        </p>
+
+        <div class="cart-quantity">
+
+          <button
+            type="button"
+            data-cart-minus="${item.id}"
+            aria-label="Decrease quantity"
+          >
+            −
+          </button>
+
+          <span>${item.quantity}</span>
+
+          <button
+            type="button"
+            data-cart-plus="${item.id}"
+            aria-label="Increase quantity"
+          >
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="cart-remove"
+        data-cart-remove="${item.id}"
+        aria-label="Remove ${item.name}"
+      >
+        ×
+      </button>
+
+    </article>
+  `).join("");
+
+  updateCartTotal();
+}
+
+function updateCartTotal() {
+  const totalElement = $("#cart-total");
+
+  if (!totalElement) return;
+
+  let total = 0;
+
+  cart.forEach(item => {
+    const numericPrice = parseFloat(
+      String(item.price).replace(/[^0-9.]/g, "")
+    );
+
+    if (!Number.isNaN(numericPrice)) {
+      total += numericPrice * item.quantity;
+    }
+  });
+
+  totalElement.textContent =
+    total > 0
+      ? `Rs. ${total.toLocaleString()}`
+      : "Price on request";
+}
+
+/* =========================
+   CART EVENTS
+========================= */
+
+document.addEventListener("click", event => {
+
+  const addButton = event.target.closest("[data-add-cart]");
+
+  if (addButton) {
+    const id = addButton.dataset.addCart;
+    const product = products.find(item => item.id === id);
+
+    if (product) {
+      addToCart(product);
+    }
+
+    return;
+  }
+
+  const removeButton = event.target.closest("[data-cart-remove]");
+
+  if (removeButton) {
+    removeFromCart(removeButton.dataset.cartRemove);
+    renderCart();
+    return;
+  }
+
+  const plusButton = event.target.closest("[data-cart-plus]");
+
+  if (plusButton) {
+    changeQuantity(plusButton.dataset.cartPlus, 1);
+    renderCart();
+    return;
+  }
+
+  const minusButton = event.target.closest("[data-cart-minus]");
+
+  if (minusButton) {
+    changeQuantity(minusButton.dataset.cartMinus, -1);
+    renderCart();
+  }
+});
+
+/* =========================
+   WHATSAPP CART ORDER
+========================= */
+
+function sendCartToWhatsApp() {
+
+  if (!cart.length) {
+    showToast("پہلے cart میں watch شامل کریں");
+    return;
+  }
+
+  let message = `Hello VECTORA 👋
+
+I would like to order / enquire about these watches:
+
+`;
+
+  cart.forEach((item, index) => {
+
+    message += `${index + 1}. ${item.name}
+Quantity: ${item.quantity}
+Price: ${item.price}
+Image: ${window.location.origin}/${item.image}
+
+`;
+  });
+
+  message += `----------------------------
+
+I would like to discuss the final price and bargaining.
+
+Please confirm availability and best price.
+
+Email:
+${STORE_EMAIL}
+
+Thank you.`;
+
+  window.open(
+    whatsappUrl(message),
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+$("#checkout-whatsapp")?.addEventListener(
+  "click",
+  sendCartToWhatsApp
+);
+
+$("[data-whatsapp-cart]")?.addEventListener(
+  "click",
+  sendCartToWhatsApp
+);
+
+/* =========================
+   PRODUCT RENDER
+========================= */
+
 function renderProducts(filter = "all") {
+
+  if (!productGrid || typeof products === "undefined") {
+    return;
+  }
+
   const list =
     filter === "all"
       ? products
-      : products.filter((product) => product.category === filter);
+      : products.filter(
+          product => product.category === filter
+        );
 
   productGrid.innerHTML = list
-    .map(
-      (product) => `
-    <article class="product-card">
-      <button
-        type="button"
-        class="product-card-button open-product"
-        data-product="${product.id}"
-        aria-label="View ${product.name}"
-      >
-        <span class="product-image">
-          <img
-            src="${product.image}"
-            alt="${product.name}: ${product.short}"
-            loading="lazy"
-          />
-          <span class="product-tag">${product.categoryLabel}</span>
-          <span class="product-arrow" aria-hidden="true">↗</span>
-        </span>
+    .map(product => {
 
-        <span class="product-info">
-          <span>
-            <h3>${product.name}</h3>
-            <p>${product.short}</p>
-          </span>
+      const price =
+        product.price ||
+        product.salePrice ||
+        "Price on request";
 
-          <p class="product-price">
-            Price<br />
-            on request
-          </p>
-        </span>
-      </button>
-    </article>
-  `
-    )
+      return `
+        <article class="product-card reveal">
+
+          <button
+            type="button"
+            class="product-card-button open-product"
+            data-product="${product.id}"
+            aria-label="View ${product.name}"
+          >
+
+            <span class="product-image">
+
+              <img
+                src="${product.image}"
+                alt="${product.name}: ${product.short || ""}"
+                loading="lazy"
+              />
+
+              <span class="product-tag">
+                ${product.categoryLabel || product.category || "Watch"}
+              </span>
+
+              <span class="product-arrow">
+                ↗
+              </span>
+
+            </span>
+
+            <span class="product-info">
+
+              <span>
+                <h3>${product.name}</h3>
+
+                <p>
+                  ${product.short || ""}
+                </p>
+              </span>
+
+              <span class="product-price-box">
+
+                <span class="product-price">
+                  Rs. ${price}
+                </span>
+
+                <button
+                  type="button"
+                  class="add-cart-small"
+                  data-add-cart="${product.id}"
+                >
+                  Add to Cart
+                </button>
+
+              </span>
+
+            </span>
+
+          </button>
+
+        </article>
+      `;
+    })
     .join("");
+
+  requestAnimationFrame(() => {
+    initRevealAnimations();
+  });
 }
 
-function renderGallery() {
-  galleryGrid.innerHTML = archive
-    .map(
-      (image, index) => `
-    <button
-      class="gallery-item"
-      type="button"
-      data-gallery-index="${index}"
-      aria-label="Open image ${index + 1} of ${archive.length}: ${image.alt}"
-    >
-      <img
-        src="${image.src}"
-        alt="${image.alt}"
-        loading="lazy"
-      />
-    </button>
-  `
-    )
-    .join("");
-}
+/* =========================
+   PRODUCT MODAL
+========================= */
 
 function openModal(product) {
-  if (!product) return;
+
+  if (!product || !productModal || !modalBody) {
+    return;
+  }
 
   activeProduct = product;
   lastFocus = document.activeElement;
 
+  const price =
+    product.price ||
+    product.salePrice ||
+    "Price on request";
+
   modalBody.innerHTML = `
+
     <div class="modal-product">
 
       <div class="modal-product-gallery">
+
         <img
           src="${product.image}"
-          alt="${product.name}: ${product.short}"
+          alt="${product.name}"
         />
+
       </div>
 
       <div class="modal-product-content">
 
         <p class="eyebrow">
           <span></span>
-          ${product.categoryLabel}
+          ${product.categoryLabel || "Timepiece"}
         </p>
 
-        <h2 id="modal-title">${product.name}</h2>
+        <h2 id="modal-title">
+          ${product.name}
+        </h2>
 
-        <p>${product.description}</p>
+        <p>
+          ${product.description || product.short || ""}
+        </p>
 
         <div class="modal-details">
+
           <span>
             <b>Palette</b>
-            <strong>${product.palette}</strong>
+            <strong>
+              ${product.palette || "Premium"}
+            </strong>
           </span>
 
           <span>
             <b>Style</b>
-            <strong>${product.notes}</strong>
+            <strong>
+              ${product.style || product.categoryLabel || "Watch"}
+            </strong>
           </span>
 
           <span>
             <b>Price</b>
-            <strong>On request</strong>
+            <strong>
+              Rs. ${price}
+            </strong>
           </span>
+
         </div>
 
-        <a
-          class="button button-gold"
-          href="https://wa.me/923328252059?text=${encodeURIComponent(
-            `Hello Time Extra, I would like to ask about the ${product.name}.`
-          )}"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Ask about this piece
-          <span aria-hidden="true">↗</span>
-        </a>
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="button button-gold"
+            data-modal-cart="${product.id}"
+          >
+            Add to Cart
+          </button>
+
+          <a
+            class="button button-outline"
+            href="${whatsappUrl(
+              `Hello VECTORA 👋
+
+I am interested in this watch:
+
+${product.name}
+
+Price: ${price}
+
+Product image:
+${window.location.origin}/${product.image}
+
+Please tell me the latest price and availability.`
+            )}"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Ask on WhatsApp ↗
+          </a>
+
+        </div>
 
       </div>
 
@@ -360,650 +533,804 @@ function openModal(product) {
   productModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
 
-  window.setTimeout(() => {
-    $(".modal-close", productModal).focus();
-  }, 20);
+  setTimeout(() => {
+    $(".modal-close", productModal)?.focus();
+  }, 50);
 }
 
+/* =========================
+   MODAL CART
+========================= */
+
+document.addEventListener("click", event => {
+
+  const modalCartButton =
+    event.target.closest("[data-modal-cart]");
+
+  if (!modalCartButton) return;
+
+  const product = products.find(
+    item => item.id === modalCartButton.dataset.modalCart
+  );
+
+  if (product) {
+    addToCart(product);
+  }
+});
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
 function closeModal(modal) {
+
   if (!modal) return;
 
   modal.classList.remove("is-open");
   modal.setAttribute("aria-hidden", "true");
+
   document.body.classList.remove("modal-open");
 
   if (lastFocus) {
-    window.setTimeout(() => lastFocus.focus(), 50);
+    lastFocus.focus();
   }
 }
 
-function showLightbox(index) {
-  lightboxIndex = (index + archive.length) % archive.length;
+$$(".modal-close").forEach(button => {
 
-  const image = archive[lightboxIndex];
+  button.addEventListener("click", () => {
+    closeModal(button.closest(".modal"));
+  });
 
-  lastFocus = document.activeElement;
+});
 
-  lightboxImage.src = image.src;
-  lightboxImage.alt = image.alt;
+$$(".modal-backdrop").forEach(backdrop => {
 
-  lightboxCount.textContent =
-    `${String(lightboxIndex + 1).padStart(2, "0")} / ` +
-    `${String(archive.length).padStart(2, "0")}`;
+  backdrop.addEventListener("click", () => {
+    closeModal(backdrop.closest(".modal"));
+  });
+
+});
+
+/* =========================
+   PRODUCT OPEN
+========================= */
+
+document.addEventListener("click", event => {
+
+  const button =
+    event.target.closest(".open-product");
+
+  if (!button) return;
+
+  const id = button.dataset.product;
+
+  if (
+    typeof products === "undefined" ||
+    !Array.isArray(products)
+  ) {
+    return;
+  }
+
+  const product =
+    products.find(item => item.id === id);
+
+  if (product) {
+    openModal(product);
+  }
+});
+
+/* =========================
+   ESCAPE
+========================= */
+
+document.addEventListener("keydown", event => {
+
+  if (event.key !== "Escape") return;
+
+  if (productModal?.classList.contains("is-open")) {
+    closeModal(productModal);
+  }
+
+  if (imageModal?.classList.contains("is-open")) {
+    closeModal(imageModal);
+  }
+
+});
+
+/* =========================
+   PRODUCT FILTERS
+========================= */
+
+$$(".filter").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    $$(".filter").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    renderProducts(
+      button.dataset.filter || "all"
+    );
+
+  });
+
+});
+
+/* =========================
+   GALLERY
+========================= */
+
+function renderGallery() {
+
+  if (!galleryGrid || typeof archive === "undefined") {
+    return;
+  }
+
+  galleryGrid.innerHTML = archive
+    .map((image, index) => `
+
+      <button
+        class="gallery-item"
+        type="button"
+        data-gallery-index="${index}"
+        aria-label="Open image ${index + 1}"
+      >
+
+        <img
+          src="${image.src}"
+          alt="${image.alt}"
+          loading="lazy"
+        />
+
+      </button>
+
+    `)
+    .join("");
+}
+
+function openLightbox(index) {
+
+  if (
+    typeof archive === "undefined" ||
+    !archive[index] ||
+    !imageModal
+  ) {
+    return;
+  }
+
+  lightboxIndex = index;
+
+  if (lightboxImage) {
+    lightboxImage.src = archive[index].src;
+    lightboxImage.alt = archive[index].alt;
+  }
+
+  if (lightboxCount) {
+    lightboxCount.textContent =
+      `${index + 1} / ${archive.length}`;
+  }
 
   imageModal.classList.add("is-open");
   imageModal.setAttribute("aria-hidden", "false");
 
   document.body.classList.add("modal-open");
-
-  window.setTimeout(() => {
-    $(".modal-close", imageModal).focus();
-  }, 20);
 }
 
-function shiftLightbox(amount) {
-  lightboxIndex =
-    (lightboxIndex + amount + archive.length) % archive.length;
+document.addEventListener("click", event => {
 
-  const image = archive[lightboxIndex];
+  const galleryButton =
+    event.target.closest("[data-gallery-index]");
 
-  lightboxImage.src = image.src;
-  lightboxImage.alt = image.alt;
+  if (!galleryButton) return;
 
-  lightboxCount.textContent =
-    `${String(lightboxIndex + 1).padStart(2, "0")} / ` +
-    `${String(archive.length).padStart(2, "0")}`;
-}
-
-function handleClick(event) {
-  const productButton = event.target.closest(".open-product");
-
-  if (productButton) {
-    openModal(
-      products.find(
-        (product) => product.id === productButton.dataset.product
-      )
-    );
-
-    return;
-  }
-
-  const galleryButton = event.target.closest(".gallery-item");
-
-  if (galleryButton) {
-    showLightbox(
-      Number(galleryButton.dataset.galleryIndex)
-    );
-  }
-}
-
-function trapFocus(event) {
-  const openModalEl = $(".modal.is-open");
-
-  if (!openModalEl || event.key !== "Tab") return;
-
-  const focusable = $$(
-    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
-    openModalEl
-  ).filter((element) => element.offsetParent !== null);
-
-  if (!focusable.length) return;
-
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (
-    !event.shiftKey &&
-    document.activeElement === last
-  ) {
-    event.preventDefault();
-    first.focus();
-  }
-}
-
-function startRevealObserver() {
-  const items = $$(".reveal");
-
-  if (!("IntersectionObserver" in window)) {
-    items.forEach((item) =>
-      item.classList.add("in-view")
-    );
-
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.12,
-      rootMargin: "0px 0px -35px"
-    }
+  openLightbox(
+    Number(galleryButton.dataset.galleryIndex)
   );
 
-  items.forEach((item) => observer.observe(item));
-}
+});
 
-function startVideoObserver() {
-  const videos = $$(".reel-card video");
+/* =========================
+   LIGHTBOX NEXT / PREVIOUS
+========================= */
 
-  if (!("IntersectionObserver" in window)) return;
+function changeLightbox(direction) {
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const video = entry.target;
-
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      });
-    },
-    {
-      threshold: 0.55
-    }
-  );
-
-  videos.forEach((video) =>
-    observer.observe(video)
-  );
-}
-
-function setupTilt() {
   if (
-    !window.matchMedia(
-      "(hover: hover) and (pointer: fine)"
+    typeof archive === "undefined" ||
+    !archive.length
+  ) {
+    return;
+  }
+
+  lightboxIndex =
+    (lightboxIndex + direction + archive.length)
+    % archive.length;
+
+  openLightbox(lightboxIndex);
+}
+
+$("[data-lightbox-next]")?.addEventListener(
+  "click",
+  () => changeLightbox(1)
+);
+
+$("[data-lightbox-prev]")?.addEventListener(
+  "click",
+  () => changeLightbox(-1)
+);
+
+document.addEventListener("keydown", event => {
+
+  if (!imageModal?.classList.contains("is-open")) {
+    return;
+  }
+
+  if (event.key === "ArrowRight") {
+    changeLightbox(1);
+  }
+
+  if (event.key === "ArrowLeft") {
+    changeLightbox(-1);
+  }
+
+});
+
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+function initRevealAnimations() {
+
+  const elements =
+    $$(".reveal:not(.revealed)");
+
+  if (!elements.length) return;
+
+  if (
+    !("IntersectionObserver" in window)
+  ) {
+
+    elements.forEach(element => {
+      element.classList.add("revealed");
+    });
+
+    return;
+  }
+
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          entry.target.classList.add("revealed");
+
+          observer.unobserve(entry.target);
+
+        });
+
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -50px 0px"
+      }
+    );
+
+  elements.forEach(element => {
+    observer.observe(element);
+  });
+}
+
+/* =========================
+   VELOCITY SCROLL
+========================= */
+
+function initVelocityRows() {
+
+  const rows =
+    $$("[data-velocity-row]");
+
+  if (!rows.length) return;
+
+  let ticking = false;
+
+  function updateRows() {
+
+    const scrollY = window.scrollY;
+
+    rows.forEach(row => {
+
+      const rect =
+        row.getBoundingClientRect();
+
+      const distance =
+        Number(row.dataset.distance || -250);
+
+      const direction =
+        Number(row.dataset.direction || 1);
+
+      const viewportCenter =
+        window.innerHeight / 2;
+
+      const rowCenter =
+        rect.top + rect.height / 2;
+
+      const progress =
+        (rowCenter - viewportCenter) /
+        window.innerHeight;
+
+      const movement =
+        progress * distance * direction;
+
+      row.style.transform =
+        `translate3d(${movement}px,0,0)`;
+    });
+
+    ticking = false;
+  }
+
+  function requestUpdate() {
+
+    if (!ticking) {
+      requestAnimationFrame(updateRows);
+      ticking = true;
+    }
+
+  }
+
+  window.addEventListener(
+    "scroll",
+    requestUpdate,
+    { passive: true }
+  );
+
+  updateRows();
+}
+
+/* =========================
+   PREMIUM CURSOR
+========================= */
+
+function initCursor() {
+
+  if (
+    window.matchMedia(
+      "(pointer: coarse)"
     ).matches
   ) {
     return;
   }
 
-  $$("[data-tilt]").forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-      const rect = card.getBoundingClientRect();
+  const cursor =
+    document.createElement("div");
 
-      const x =
-        (event.clientX - rect.left) /
-          rect.width -
-        0.5;
+  cursor.className = "premium-cursor";
 
-      const y =
-        (event.clientY - rect.top) /
-          rect.height -
-        0.5;
+  document.body.appendChild(cursor);
 
-      const rotateX = (-y * 5).toFixed(2);
-      const rotateY = (x * 5).toFixed(2);
-
-      if (card.classList.contains("hero-product")) {
-        card.style.transform =
-          `translateY(-44%) ` +
-          `rotate(-4deg) ` +
-          `perspective(1100px) ` +
-          `rotateX(${rotateX}deg) ` +
-          `rotateY(${rotateY}deg)`;
-      } else {
-        card.style.transform =
-          `perspective(900px) ` +
-          `rotateY(${-10 + Number(rotateY)}deg) ` +
-          `rotateZ(-2deg) ` +
-          `rotateX(${rotateX}deg)`;
-      }
-    });
-
-    card.addEventListener("pointerleave", () => {
-      card.style.transform = "";
-    });
-  });
-}
-
-function setupHeader() {
-  const header = $(".site-header");
-  const menuButton = $(".menu-toggle");
-  const nav = $(".site-nav");
-  const navLabel = $(".sr-only", menuButton);
-
-  const updateHeader = () => {
-    header.classList.toggle(
-      "is-scrolled",
-      window.scrollY > 28
-    );
-  };
-
-  updateHeader();
+  let mouseX = 0;
+  let mouseY = 0;
+  let currentX = 0;
+  let currentY = 0;
 
   window.addEventListener(
-    "scroll",
-    updateHeader,
-    {
-      passive: true
+    "mousemove",
+    event => {
+
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+
+    },
+    { passive: true }
+  );
+
+  function animateCursor() {
+
+    currentX +=
+      (mouseX - currentX) * 0.18;
+
+    currentY +=
+      (mouseY - currentY) * 0.18;
+
+    cursor.style.transform =
+      `translate3d(${currentX}px,${currentY}px,0)`;
+
+    requestAnimationFrame(
+      animateCursor
+    );
+  }
+
+  animateCursor();
+
+  const interactive =
+    "a,button,input,textarea,select,.product-card";
+
+  document.addEventListener(
+    "mouseover",
+    event => {
+
+      if (
+        event.target.closest(interactive)
+      ) {
+        cursor.classList.add("cursor-hover");
+      }
+
     }
   );
 
-  menuButton.addEventListener("click", () => {
-    const isOpen =
-      nav.classList.toggle("is-open");
+  document.addEventListener(
+    "mouseout",
+    event => {
 
-    menuButton.classList.toggle(
-      "is-open",
-      isOpen
-    );
+      if (
+        event.target.closest(interactive)
+      ) {
+        cursor.classList.remove(
+          "cursor-hover"
+        );
+      }
 
-    menuButton.setAttribute(
-      "aria-expanded",
-      String(isOpen)
-    );
-
-    navLabel.textContent =
-      isOpen
-        ? "Close navigation"
-        : "Open navigation";
-  });
-
-  $$("a", nav).forEach((link) =>
-    link.addEventListener("click", () => {
-      nav.classList.remove("is-open");
-
-      menuButton.classList.remove("is-open");
-
-      menuButton.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
-      navLabel.textContent =
-        "Open navigation";
-    })
+    }
   );
-
-  if ("IntersectionObserver" in window) {
-    const sections = [
-      "home",
-      "about",
-      "products",
-      "contact"
-    ].map((id) =>
-      document.getElementById(id)
-    );
-
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-          const showing = entries
-            .filter(
-              (entry) =>
-                entry.isIntersecting
-            )
-            .sort(
-              (a, b) =>
-                b.intersectionRatio -
-                a.intersectionRatio
-            )[0];
-
-          if (!showing) return;
-
-          $$("a", nav).forEach((link) =>
-            link.classList.toggle(
-              "active",
-              link.getAttribute("href") ===
-                `#${showing.target.id}`
-            )
-          );
-        },
-        {
-          rootMargin:
-            "-35% 0px -55%",
-          threshold: [0, 0.2, 0.5]
-        }
-      );
-
-    sections.forEach(
-      (section) =>
-        section &&
-        observer.observe(section)
-    );
-  }
 }
 
-function setupCursorGlow() {
-  const glow = $(".cursor-glow");
+/* =========================
+   PARALLAX HERO
+========================= */
+
+function initHeroParallax() {
+
+  const hero =
+    $(".hero");
+
+  if (!hero) return;
 
   if (
-    !window.matchMedia(
-      "(hover: hover)"
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+  ) {
+    return;
+  }
+
+  let ticking = false;
+
+  function update() {
+
+    const scrollY =
+      window.scrollY;
+
+    if (scrollY < window.innerHeight) {
+
+      hero.style.setProperty(
+        "--hero-scroll",
+        `${scrollY * 0.18}px`
+      );
+
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+
+    },
+    { passive: true }
+  );
+}
+
+/* =========================
+   IMAGE TILT
+========================= */
+
+function initImageTilt() {
+
+  if (
+    window.matchMedia(
+      "(pointer: coarse)"
     ).matches
   ) {
     return;
   }
 
   document.addEventListener(
-    "pointermove",
-    (event) => {
-      glow.style.left =
-        `${event.clientX}px`;
+    "mousemove",
+    event => {
 
-      glow.style.top =
-        `${event.clientY}px`;
+      const card =
+        event.target.closest(
+          ".product-card"
+        );
+
+      if (!card) return;
+
+      const rect =
+        card.getBoundingClientRect();
+
+      const x =
+        (event.clientX - rect.left) /
+        rect.width;
+
+      const y =
+        (event.clientY - rect.top) /
+        rect.height;
+
+      const rotateY =
+        (x - 0.5) * 5;
+
+      const rotateX =
+        (0.5 - y) * 5;
+
+      card.style.transform =
+        `perspective(900px)
+         rotateX(${rotateX}deg)
+         rotateY(${rotateY}deg)
+         translateY(-4px)`;
+
     },
-    {
-      passive: true
+    { passive: true }
+  );
+
+  document.addEventListener(
+    "mouseout",
+    event => {
+
+      const card =
+        event.target.closest(
+          ".product-card"
+        );
+
+      if (!card) return;
+
+      card.style.transform = "";
+
     }
   );
 }
 
-function setupVelocityGallery() {
-  const stage = $("#velocity-stage");
-  const rows =
-    $$("[data-velocity-row]");
+/* =========================
+   CONTACT FORM
+========================= */
 
-  const reducedMotion =
-    window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+const contactForm =
+  $("#contact-form");
 
-  if (
-    !stage ||
-    !rows.length ||
-    reducedMotion
-  ) {
-    return;
+contactForm?.addEventListener(
+  "submit",
+  event => {
+
+    event.preventDefault();
+
+    const formData =
+      new FormData(contactForm);
+
+    const name =
+      formData.get("name") || "";
+
+    const phone =
+      formData.get("phone") || "";
+
+    const interest =
+      formData.get("interest") || "";
+
+    const message =
+      formData.get("message") || "";
+
+    const whatsappMessage =
+`Hello VECTORA 👋
+
+Name: ${name}
+Phone: ${phone}
+
+Interested in:
+${interest}
+
+Message:
+${message}
+
+Email:
+${STORE_EMAIL}`;
+
+    window.open(
+      whatsappUrl(whatsappMessage),
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    contactForm.reset();
+
+  }
+);
+
+/* =========================
+   EMAIL REPLACEMENT
+========================= */
+
+$$('a[href^="mailto:"]').forEach(
+  link => {
+
+    link.href =
+      `mailto:${STORE_EMAIL}`;
+
+    link.textContent =
+      STORE_EMAIL;
+
+  }
+);
+
+/* =========================
+   GENERAL WHATSAPP BUTTONS
+========================= */
+
+$$(
+  'a[href*="wa.me/"]'
+).forEach(link => {
+
+  const oldHref =
+    link.getAttribute("href");
+
+  if (!oldHref) return;
+
+  try {
+
+    const url =
+      new URL(oldHref);
+
+    const text =
+      url.searchParams.get("text");
+
+    if (text) {
+
+      const newMessage =
+        text
+          .replace(
+            /Time Extra/gi,
+            "VECTORA"
+          );
+
+      link.href =
+        whatsappUrl(newMessage);
+
+    }
+
+  } catch {
+    // Ignore malformed URLs.
   }
 
-  let lastScroll =
-    window.scrollY;
+});
 
-  let velocity = 0;
-  let stageVisible = false;
+/* =========================
+   VIDEO AUTOPLAY
+========================= */
 
-  const clamp = (
-    value,
-    min,
-    max
-  ) =>
-    Math.min(
-      Math.max(value, min),
-      max
-    );
+function initVideos() {
+
+  const videos =
+    $$("video");
+
+  if (!videos.length) return;
+
+  if (
+    !("IntersectionObserver" in window)
+  ) return;
 
   const observer =
     new IntersectionObserver(
-      (entries) => {
-        stageVisible =
-          entries[0].isIntersecting;
+      entries => {
+
+        entries.forEach(entry => {
+
+          const video =
+            entry.target;
+
+          if (entry.isIntersecting) {
+
+            video.play().catch(
+              () => {}
+            );
+
+          } else {
+
+            video.pause();
+
+          }
+
+        });
+
       },
       {
-        threshold: 0
+        threshold: 0.15
       }
     );
 
-  observer.observe(stage);
+  videos.forEach(video => {
+    observer.observe(video);
+  });
+}
 
-  window.addEventListener(
-    "scroll",
-    () => {
-      const currentScroll =
-        window.scrollY;
+/* =========================
+   MOBILE PERFORMANCE
+========================= */
 
-      velocity = clamp(
-        velocity +
-          (currentScroll -
-            lastScroll) *
-            0.18,
-        -95,
-        95
-      );
+function optimizeMobile() {
 
-      lastScroll =
-        currentScroll;
-    },
-    {
-      passive: true
-    }
-  );
+  const isMobile =
+    window.innerWidth <= 768;
 
-  const animate = () => {
-    if (stageVisible) {
-      const rect =
-        stage.getBoundingClientRect();
+  if (!isMobile) return;
 
-      const journey = clamp(
-        (window.innerHeight -
-          rect.top) /
-          (window.innerHeight +
-            rect.height),
-        0,
-        1
-      );
+  document.documentElement
+    .classList.add("mobile-device");
 
-      rows.forEach((row) => {
-        const base =
-          Number(
-            row.dataset.distance
-          ) *
-          (journey - 0.5);
+  $$("video").forEach(video => {
 
-        const direction =
-          Number(
-            row.dataset.direction
-          );
-
-        const linkedOffset =
-          velocity *
-          direction *
-          0.82;
-
-        row.style.transform =
-          `translate3d(` +
-          `${base + linkedOffset}px, 0, 0)`;
-      });
-    }
-
-    velocity *= 0.9;
-
-    window.requestAnimationFrame(
-      animate
+    video.setAttribute(
+      "preload",
+      "none"
     );
-  };
 
-  window.requestAnimationFrame(
-    animate
-  );
+  });
 }
 
-function setupForm() {
-  const form =
-    $("#contact-form");
-
-  form.addEventListener(
-    "submit",
-    (event) => {
-      event.preventDefault();
-
-      const formData =
-        new FormData(form);
-
-      const name =
-        formData
-          .get("name")
-          .trim();
-
-      const phone =
-        formData
-          .get("phone")
-          .trim();
-
-      const interest =
-        formData.get(
-          "interest"
-        );
-
-      const message =
-        formData
-          .get("message")
-          .trim();
-
-      const body =
-        `Hello Time Extra,%0A%0A` +
-        `Name: ${encodeURIComponent(
-          name
-        )}%0A` +
-        `Phone: ${encodeURIComponent(
-          phone
-        )}%0A` +
-        `Interest: ${encodeURIComponent(
-          interest
-        )}%0A` +
-        `Message: ${encodeURIComponent(
-          message ||
-            "Not specified"
-        )}`;
-
-      window.open(
-        `https://wa.me/923328252059?text=${body}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-      toast.classList.add(
-        "show"
-      );
-
-      form.reset();
-
-      window.setTimeout(
-        () =>
-          toast.classList.remove(
-            "show"
-          ),
-        4200
-      );
-    }
-  );
-}
-
-renderProducts();
-renderGallery();
-
-startRevealObserver();
-startVideoObserver();
-
-setupTilt();
-setupHeader();
-setupCursorGlow();
-setupVelocityGallery();
-setupForm();
-
-$("#year").textContent =
-  new Date().getFullYear();
+/* =========================
+   INITIALIZE
+========================= */
 
 document.addEventListener(
-  "click",
-  handleClick
+  "DOMContentLoaded",
+  () => {
+
+    renderProducts("all");
+    renderGallery();
+    renderCart();
+
+    initRevealAnimations();
+    initVelocityRows();
+    initCursor();
+    initHeroParallax();
+    initImageTilt();
+    initVideos();
+    optimizeMobile();
+
+    updateCartUI();
+
+  }
 );
 
-$$(".filter").forEach(
-  (button) => {
-    button.addEventListener(
-      "click",
+/* =========================
+   WINDOW RESIZE
+========================= */
+
+let resizeTimer;
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(
       () => {
-        $$(".filter").forEach(
-          (item) =>
-            item.classList.toggle(
-              "active",
-              item === button
-            )
-        );
-
-        renderProducts(
-          button.dataset.filter
-        );
-      }
+        optimizeMobile();
+      },
+      180
     );
-  }
-);
 
-$$("[data-close-modal]").forEach(
-  (button) =>
-    button.addEventListener(
-      "click",
-      () =>
-        closeModal(
-          productModal
-        )
-    )
-);
-
-$$("[data-close-image]").forEach(
-  (button) =>
-    button.addEventListener(
-      "click",
-      () =>
-        closeModal(
-          imageModal
-        )
-    )
-);
-
-$(".gallery-prev").addEventListener(
-  "click",
-  () => shiftLightbox(-1)
-);
-
-$(".gallery-next").addEventListener(
-  "click",
-  () => shiftLightbox(1)
-);
-
-document.addEventListener(
-  "keydown",
-  (event) => {
-    if (event.key === "Escape") {
-      if (
-        productModal.classList.contains(
-          "is-open"
-        )
-      ) {
-        closeModal(productModal);
-      }
-
-      if (
-        imageModal.classList.contains(
-          "is-open"
-        )
-      ) {
-        closeModal(imageModal);
-      }
-    }
-
-    if (
-      imageModal.classList.contains(
-        "is-open"
-      ) &&
-      event.key === "ArrowLeft"
-    ) {
-      shiftLightbox(-1);
-    }
-
-    if (
-      imageModal.classList.contains(
-        "is-open"
-      ) &&
-      event.key === "ArrowRight"
-    ) {
-      shiftLightbox(1);
-    }
-
-    trapFocus(event);
-  }
+  },
+  { passive: true }
 );
