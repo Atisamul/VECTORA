@@ -1,376 +1,824 @@
-/* =========================================================
-   VECTORA / TIME EXTRA — PREMIUM WATCH WEBSITE JS
-   ========================================================= */
-
 "use strict";
 
-/* =========================
-   CONFIG
-========================= */
+/* =========================================================
+   VECTORA — FINAL SCRIPT.JS
+   Cart + WhatsApp + Gallery + Modal + Scroll + Cursor
+   ========================================================= */
 
 const WHATSAPP_NUMBER = "923328252059";
 const STORE_EMAIL = "Waqtora000@gmail.com";
 
-/* =========================
+/* ---------------------------------------------------------
    HELPERS
-========================= */
+--------------------------------------------------------- */
 
-const $ = (selector, scope = document) => scope.querySelector(selector);
-const $$ = (selector, scope = document) => [
-  ...scope.querySelectorAll(selector)
-];
+const $ = (selector, scope = document) =>
+  scope.querySelector(selector);
 
-const productGrid = $("#product-grid");
-const galleryGrid = $("#gallery-grid");
-const productModal = $("#product-modal");
-const imageModal = $("#image-modal");
-const modalBody = $("#modal-body");
-const lightboxImage = $("#lightbox-image");
-const lightboxCount = $("#lightbox-count");
-const toast = $("#toast");
+const $$ = (selector, scope = document) =>
+  [...scope.querySelectorAll(selector)];
+
+/* ---------------------------------------------------------
+   STATE
+--------------------------------------------------------- */
+
+let cart = [];
+
+try {
+  cart = JSON.parse(
+    localStorage.getItem("vectora-cart") || "[]"
+  );
+
+  if (!Array.isArray(cart)) {
+    cart = [];
+  }
+} catch {
+  cart = [];
+}
 
 let activeProduct = null;
 let lastFocus = null;
 let lightboxIndex = 0;
 
-let cart = JSON.parse(localStorage.getItem("vectora-cart") || "[]");
+/* ---------------------------------------------------------
+   CONFIG
+--------------------------------------------------------- */
 
-/* =========================
+const CART_KEY = "vectora-cart";
+
+/* ---------------------------------------------------------
+   DOM
+--------------------------------------------------------- */
+
+const productGrid = $("#product-grid");
+const galleryGrid = $("#gallery-grid");
+
+const productModal = $("#product-modal");
+const imageModal = $("#image-modal");
+
+const modalBody = $("#modal-body");
+const lightboxImage = $("#lightbox-image");
+const lightboxCount = $("#lightbox-count");
+
+const toast = $("#toast");
+
+const cartDrawer = $("#cart-drawer");
+const cartItems = $("#cart-items");
+const cartTotal = $("#cart-total");
+const cartWhatsapp = $("#cart-whatsapp");
+const cartClose = $("#cart-close");
+
+const backToTop = $("#back-to-top");
+
+/* =========================================================
+   PRODUCT DATA SAFETY
+   ========================================================= */
+
+/*
+   Your existing project may define products/archive
+   in another script or inline data.
+
+   We never crash if those arrays are missing.
+*/
+
+function getProducts() {
+  return Array.isArray(window.products)
+    ? window.products
+    : [];
+}
+
+function getArchive() {
+  return Array.isArray(window.archive)
+    ? window.archive
+    : [];
+}
+
+/* =========================================================
+   TEXT / HTML SAFETY
+   ========================================================= */
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* =========================================================
    WHATSAPP
-========================= */
+========================================================= */
 
 function whatsappUrl(message) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  return (
+    "https://wa.me/" +
+    WHATSAPP_NUMBER +
+    "?text=" +
+    encodeURIComponent(message)
+  );
 }
 
-/* =========================
+function getProductImageUrl(image) {
+
+  if (!image) {
+    return "";
+  }
+
+  try {
+    return new URL(
+      image,
+      window.location.href
+    ).href;
+  } catch {
+    return image;
+  }
+}
+
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
+
+let toastTimer = null;
 
 function showToast(message) {
-  if (!toast) return;
+
+  if (!toast) {
+    return;
+  }
 
   toast.textContent = message;
+
   toast.classList.add("is-visible");
 
-  clearTimeout(showToast.timer);
+  clearTimeout(toastTimer);
 
-  showToast.timer = setTimeout(() => {
+  toastTimer = setTimeout(() => {
     toast.classList.remove("is-visible");
-  }, 2500);
+  }, 2600);
 }
 
-/* =========================
+/* =========================================================
    CART STORAGE
-========================= */
+========================================================= */
 
 function saveCart() {
-  localStorage.setItem("vectora-cart", JSON.stringify(cart));
+
+  try {
+    localStorage.setItem(
+      CART_KEY,
+      JSON.stringify(cart)
+    );
+  } catch {
+    // Storage unavailable
+  }
+
   updateCartUI();
 }
 
 function getCartCount() {
-  return cart.reduce((total, item) => total + item.quantity, 0);
+
+  return cart.reduce(
+    (total, item) =>
+      total + Number(item.quantity || 0),
+    0
+  );
 }
 
-function addToCart(product) {
-  if (!product) return;
+/* =========================================================
+   PRICE
+========================================================= */
 
-  const existing = cart.find(item => item.id === product.id);
+function getProductPrice(product) {
+
+  if (!product) {
+    return "Price on request";
+  }
+
+  return (
+    product.price ??
+    product.salePrice ??
+    "Price on request"
+  );
+}
+
+function numericPrice(price) {
+
+  if (
+    price === null ||
+    price === undefined
+  ) {
+    return 0;
+  }
+
+  const value = String(price)
+    .replace(/,/g, "")
+    .replace(/[^\d.]/g, "");
+
+  const number = Number.parseFloat(value);
+
+  return Number.isFinite(number)
+    ? number
+    : 0;
+}
+
+/* =========================================================
+   ADD TO CART
+========================================================= */
+
+function addToCart(product) {
+
+  if (!product || !product.id) {
+    return;
+  }
+
+  const existing =
+    cart.find(
+      item => item.id === product.id
+    );
 
   if (existing) {
-    existing.quantity += 1;
+
+    existing.quantity =
+      Number(existing.quantity || 0) + 1;
+
   } else {
+
     cart.push({
       id: product.id,
-      name: product.name,
-      image: product.image,
-      price: product.price || "Price on request",
+      name: product.name || "Watch",
+      image: product.image || "",
+      price: getProductPrice(product),
       quantity: 1
     });
   }
 
   saveCart();
 
-  showToast(`${product.name} cart میں شامل ہوگئی ✓`);
+  showToast(
+    `${product.name || "Watch"} added to your selection ✓`
+  );
 }
+
+/* =========================================================
+   REMOVE CART ITEM
+========================================================= */
 
 function removeFromCart(id) {
-  cart = cart.filter(item => item.id !== id);
+
+  cart =
+    cart.filter(
+      item => String(item.id) !== String(id)
+    );
+
   saveCart();
+
+  renderCart();
 }
 
+/* =========================================================
+   CHANGE QUANTITY
+========================================================= */
+
 function changeQuantity(id, amount) {
-  const item = cart.find(product => product.id === id);
 
-  if (!item) return;
+  const item =
+    cart.find(
+      product =>
+        String(product.id) === String(id)
+    );
 
-  item.quantity += amount;
+  if (!item) {
+    return;
+  }
+
+  item.quantity =
+    Number(item.quantity || 0) + amount;
 
   if (item.quantity <= 0) {
+
     removeFromCart(id);
     return;
   }
 
   saveCart();
+
+  renderCart();
 }
 
-/* =========================
+/* =========================================================
    CART UI
-========================= */
+========================================================= */
 
 function updateCartUI() {
+
   const count = getCartCount();
 
   $$(".cart-count").forEach(element => {
-    element.textContent = count;
-    element.classList.toggle("has-items", count > 0);
-  });
 
-  $("[data-cart-count]")?.setAttribute("data-cart-count", count);
+    element.textContent = count;
+
+    element.classList.toggle(
+      "has-items",
+      count > 0
+    );
+  });
 }
 
-function renderCart() {
-  const cartContainer = $("#cart-items");
+/* =========================================================
+   CART DRAWER
+========================================================= */
 
-  if (!cartContainer) return;
+function openCart() {
+
+  if (!cartDrawer) {
+    return;
+  }
+
+  cartDrawer.classList.add("is-open");
+
+  cartDrawer.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.classList.add(
+    "cart-open"
+  );
+
+  renderCart();
+
+  setTimeout(() => {
+    cartClose?.focus();
+  }, 50);
+}
+
+function closeCart() {
+
+  if (!cartDrawer) {
+    return;
+  }
+
+  cartDrawer.classList.remove("is-open");
+
+  cartDrawer.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  document.body.classList.remove(
+    "cart-open"
+  );
+}
+
+/* =========================================================
+   CART RENDER
+========================================================= */
+
+function renderCart() {
+
+  if (!cartItems) {
+    return;
+  }
 
   if (!cart.length) {
-    cartContainer.innerHTML = `
-      <div class="empty-cart">
+
+    cartItems.innerHTML = `
+      <div class="cart-empty">
         <span>◌</span>
+
         <h3>Your cart is empty</h3>
-        <p>Select your favourite timepiece to continue.</p>
+
+        <p>
+          Add a watch from the collection
+          to begin your selection.
+        </p>
+
+        <a
+          class="button button-gold"
+          href="#products"
+          id="continue-shopping"
+        >
+          Explore Watches
+        </a>
       </div>
     `;
 
     updateCartTotal();
+
     return;
   }
 
-  cartContainer.innerHTML = cart.map(item => `
-    <article class="cart-item">
+  cartItems.innerHTML =
+    cart.map(item => {
 
-      <div class="cart-item-image">
-        <img
-          src="${item.image}"
-          alt="${item.name}"
-          loading="lazy"
-        />
-      </div>
+      const image =
+        escapeHTML(item.image || "");
 
-      <div class="cart-item-info">
-        <h4>${item.name}</h4>
+      const name =
+        escapeHTML(item.name || "Watch");
 
-        <p class="cart-item-price">
-          ${item.price}
-        </p>
+      const price =
+        escapeHTML(
+          item.price || "Price on request"
+        );
 
-        <div class="cart-quantity">
+      const id =
+        escapeHTML(String(item.id));
+
+      return `
+        <article class="cart-item">
+
+          <div class="cart-item-image">
+
+            <img
+              src="${image}"
+              alt="${name}"
+              loading="lazy"
+            >
+
+          </div>
+
+          <div class="cart-item-info">
+
+            <h4>
+              ${name}
+            </h4>
+
+            <p class="cart-item-price">
+              ${price}
+            </p>
+
+            <div class="cart-quantity">
+
+              <button
+                type="button"
+                data-cart-minus="${id}"
+                aria-label="Decrease quantity"
+              >
+                −
+              </button>
+
+              <span>
+                ${Number(item.quantity || 1)}
+              </span>
+
+              <button
+                type="button"
+                data-cart-plus="${id}"
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+
+            </div>
+
+          </div>
 
           <button
             type="button"
-            data-cart-minus="${item.id}"
-            aria-label="Decrease quantity"
+            class="cart-remove"
+            data-cart-remove="${id}"
+            aria-label="Remove ${name}"
           >
-            −
+            ×
           </button>
 
-          <span>${item.quantity}</span>
+        </article>
+      `;
 
-          <button
-            type="button"
-            data-cart-plus="${item.id}"
-            aria-label="Increase quantity"
-          >
-            +
-          </button>
-
-        </div>
-
-      </div>
-
-      <button
-        type="button"
-        class="cart-remove"
-        data-cart-remove="${item.id}"
-        aria-label="Remove ${item.name}"
-      >
-        ×
-      </button>
-
-    </article>
-  `).join("");
+    }).join("");
 
   updateCartTotal();
 }
 
+/* =========================================================
+   CART TOTAL
+========================================================= */
+
 function updateCartTotal() {
-  const totalElement = $("#cart-total");
 
-  if (!totalElement) return;
+  if (!cartTotal) {
+    return;
+  }
 
-  let total = 0;
+  const total =
+    cart.reduce(
+      (sum, item) => {
 
-  cart.forEach(item => {
-    const numericPrice = parseFloat(
-      String(item.price).replace(/[^0-9.]/g, "")
+        return (
+          sum +
+          numericPrice(item.price) *
+          Number(item.quantity || 0)
+        );
+
+      },
+      0
     );
 
-    if (!Number.isNaN(numericPrice)) {
-      total += numericPrice * item.quantity;
-    }
-  });
-
-  totalElement.textContent =
+  cartTotal.textContent =
     total > 0
       ? `Rs. ${total.toLocaleString()}`
       : "Price on request";
 }
 
-/* =========================
-   CART EVENTS
-========================= */
+/* =========================================================
+   CART CLICK EVENTS
+========================================================= */
 
-document.addEventListener("click", event => {
+document.addEventListener(
+  "click",
+  event => {
 
-  const addButton = event.target.closest("[data-add-cart]");
+    const addButton =
+      event.target.closest(
+        "[data-add-cart]"
+      );
 
-  if (addButton) {
-    const id = addButton.dataset.addCart;
-    const product = products.find(item => item.id === id);
+    if (addButton) {
 
-    if (product) {
-      addToCart(product);
+      event.preventDefault();
+      event.stopPropagation();
+
+      const id =
+        addButton.dataset.addCart;
+
+      const product =
+        getProducts().find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+      if (product) {
+        addToCart(product);
+      }
+
+      return;
     }
 
-    return;
+    const removeButton =
+      event.target.closest(
+        "[data-cart-remove]"
+      );
+
+    if (removeButton) {
+
+      removeFromCart(
+        removeButton.dataset.cartRemove
+      );
+
+      return;
+    }
+
+    const plusButton =
+      event.target.closest(
+        "[data-cart-plus]"
+      );
+
+    if (plusButton) {
+
+      changeQuantity(
+        plusButton.dataset.cartPlus,
+        1
+      );
+
+      return;
+    }
+
+    const minusButton =
+      event.target.closest(
+        "[data-cart-minus]"
+      );
+
+    if (minusButton) {
+
+      changeQuantity(
+        minusButton.dataset.cartMinus,
+        -1
+      );
+
+      return;
+    }
+
+    const cartButton =
+      event.target.closest(
+        "#cart-open, [data-cart-open], .cart-trigger, .cart-button"
+      );
+
+    if (cartButton) {
+
+      event.preventDefault();
+
+      openCart();
+
+      return;
+    }
+
+    const closeButton =
+      event.target.closest(
+        "#cart-close, .cart-overlay"
+      );
+
+    if (closeButton) {
+
+      event.preventDefault();
+
+      closeCart();
+
+      return;
+    }
+
+    const continueButton =
+      event.target.closest(
+        "#continue-shopping"
+      );
+
+    if (continueButton) {
+      closeCart();
+    }
+
   }
+);
 
-  const removeButton = event.target.closest("[data-cart-remove]");
-
-  if (removeButton) {
-    removeFromCart(removeButton.dataset.cartRemove);
-    renderCart();
-    return;
-  }
-
-  const plusButton = event.target.closest("[data-cart-plus]");
-
-  if (plusButton) {
-    changeQuantity(plusButton.dataset.cartPlus, 1);
-    renderCart();
-    return;
-  }
-
-  const minusButton = event.target.closest("[data-cart-minus]");
-
-  if (minusButton) {
-    changeQuantity(minusButton.dataset.cartMinus, -1);
-    renderCart();
-  }
-});
-
-/* =========================
-   WHATSAPP CART ORDER
-========================= */
+/* =========================================================
+   BUY CART ON WHATSAPP
+========================================================= */
 
 function sendCartToWhatsApp() {
 
   if (!cart.length) {
-    showToast("پہلے cart میں watch شامل کریں");
+
+    showToast(
+      "Your cart is empty. Add a watch first."
+    );
+
     return;
   }
 
-  let message = `Hello VECTORA 👋
+  let message =
+`Hello VECTORA 👋
 
-I would like to order / enquire about these watches:
+I would like to enquire/order these watches:
 
 `;
 
-  cart.forEach((item, index) => {
+  cart.forEach(
+    (item, index) => {
 
-    message += `${index + 1}. ${item.name}
+      const imageUrl =
+        getProductImageUrl(
+          item.image
+        );
+
+      message +=
+`${index + 1}. ${item.name}
 Quantity: ${item.quantity}
 Price: ${item.price}
-Image: ${window.location.origin}/${item.image}
+Product image: ${imageUrl}
 
 `;
-  });
+    }
+  );
 
-  message += `----------------------------
+  const total =
+    cart.reduce(
+      (sum, item) =>
+        sum +
+        numericPrice(item.price) *
+        Number(item.quantity || 0),
+      0
+    );
 
-I would like to discuss the final price and bargaining.
+  message +=
+`----------------------------
 
-Please confirm availability and best price.
+Estimated total:
+${total > 0
+  ? `Rs. ${total.toLocaleString()}`
+  : "Price on request"}
+
+Please confirm:
+
+• Availability
+• Final price
+• Best/bargain price
+• Delivery details
 
 Email:
 ${STORE_EMAIL}
 
 Thank you.`;
 
+  const url =
+    whatsappUrl(message);
+
   window.open(
-    whatsappUrl(message),
+    url,
     "_blank",
     "noopener,noreferrer"
   );
 }
 
-$("#checkout-whatsapp")?.addEventListener(
+/* IMPORTANT:
+   HTML uses #cart-whatsapp
+*/
+
+cartWhatsapp?.addEventListener(
   "click",
   sendCartToWhatsApp
 );
 
-$("[data-whatsapp-cart]")?.addEventListener(
-  "click",
-  sendCartToWhatsApp
-);
+/* =========================================================
+   PRODUCT GRID
+========================================================= */
 
-/* =========================
-   PRODUCT RENDER
-========================= */
+function renderProducts(
+  filter = "all"
+) {
 
-function renderProducts(filter = "all") {
+  if (!productGrid) {
+    return;
+  }
 
-  if (!productGrid || typeof products === "undefined") {
+  const allProducts =
+    getProducts();
+
+  if (!allProducts.length) {
     return;
   }
 
   const list =
     filter === "all"
-      ? products
-      : products.filter(
-          product => product.category === filter
+      ? allProducts
+      : allProducts.filter(
+          product =>
+            product.category === filter
         );
 
-  productGrid.innerHTML = list
-    .map(product => {
+  productGrid.innerHTML =
+    list.map(product => {
+
+      const id =
+        escapeHTML(
+          String(product.id)
+        );
+
+      const name =
+        escapeHTML(
+          product.name || "Watch"
+        );
+
+      const short =
+        escapeHTML(
+          product.short || ""
+        );
+
+      const image =
+        escapeHTML(
+          product.image || ""
+        );
 
       const price =
-        product.price ||
-        product.salePrice ||
-        "Price on request";
+        escapeHTML(
+          getProductPrice(product)
+        );
+
+      const category =
+        escapeHTML(
+          product.categoryLabel ||
+          product.category ||
+          "Watch"
+        );
+
+      /*
+        IMPORTANT:
+        We do NOT put a button inside a button.
+      */
 
       return `
-        <article class="product-card reveal">
+        <article
+          class="product-card reveal"
+          data-product="${id}"
+        >
 
           <button
             type="button"
             class="product-card-button open-product"
-            data-product="${product.id}"
-            aria-label="View ${product.name}"
+            data-product="${id}"
+            aria-label="View ${name}"
           >
 
             <span class="product-image">
 
               <img
-                src="${product.image}"
-                alt="${product.name}: ${product.short || ""}"
+                src="${image}"
+                alt="${name}"
                 loading="lazy"
-              />
+              >
 
               <span class="product-tag">
-                ${product.categoryLabel || product.category || "Watch"}
+                ${category}
               </span>
 
               <span class="product-arrow">
@@ -382,11 +830,15 @@ function renderProducts(filter = "all") {
             <span class="product-info">
 
               <span>
-                <h3>${product.name}</h3>
 
-                <p>
-                  ${product.short || ""}
-                </p>
+                <span class="product-name">
+                  ${name}
+                </span>
+
+                <span class="product-description">
+                  ${short}
+                </span>
+
               </span>
 
               <span class="product-price-box">
@@ -395,47 +847,117 @@ function renderProducts(filter = "all") {
                   Rs. ${price}
                 </span>
 
-                <button
-                  type="button"
-                  class="add-cart-small"
-                  data-add-cart="${product.id}"
-                >
-                  Add to Cart
-                </button>
-
               </span>
 
             </span>
 
           </button>
 
+          <button
+            type="button"
+            class="add-cart-small"
+            data-add-cart="${id}"
+            aria-label="Add ${name} to cart"
+          >
+            Add to Cart
+          </button>
+
         </article>
       `;
-    })
-    .join("");
 
-  requestAnimationFrame(() => {
-    initRevealAnimations();
-  });
+    }).join("");
+
+  requestAnimationFrame(
+    initRevealAnimations
+  );
 }
 
-/* =========================
+/* =========================================================
    PRODUCT MODAL
-========================= */
+========================================================= */
 
-function openModal(product) {
+function openProductModal(
+  product
+) {
 
-  if (!product || !productModal || !modalBody) {
+  if (
+    !product ||
+    !productModal ||
+    !modalBody
+  ) {
     return;
   }
 
-  activeProduct = product;
-  lastFocus = document.activeElement;
+  activeProduct =
+    product;
+
+  lastFocus =
+    document.activeElement;
+
+  const name =
+    escapeHTML(
+      product.name || "Watch"
+    );
+
+  const image =
+    escapeHTML(
+      product.image || ""
+    );
 
   const price =
-    product.price ||
-    product.salePrice ||
-    "Price on request";
+    escapeHTML(
+      getProductPrice(product)
+    );
+
+  const description =
+    escapeHTML(
+      product.description ||
+      product.short ||
+      ""
+    );
+
+  const category =
+    escapeHTML(
+      product.categoryLabel ||
+      product.category ||
+      "Timepiece"
+    );
+
+  const palette =
+    escapeHTML(
+      product.palette ||
+      "Premium"
+    );
+
+  const style =
+    escapeHTML(
+      product.style ||
+      category
+    );
+
+  const imageUrl =
+    getProductImageUrl(
+      product.image
+    );
+
+  const message =
+`Hello VECTORA 👋
+
+I am interested in this watch:
+
+${product.name}
+
+Price:
+${getProductPrice(product)}
+
+Product image:
+${imageUrl}
+
+Please tell me:
+• Availability
+• Latest price
+• Best/bargain price
+• Delivery details`;
 
   modalBody.innerHTML = `
 
@@ -444,9 +966,9 @@ function openModal(product) {
       <div class="modal-product-gallery">
 
         <img
-          src="${product.image}"
-          alt="${product.name}"
-        />
+          src="${image}"
+          alt="${name}"
+        >
 
       </div>
 
@@ -454,15 +976,15 @@ function openModal(product) {
 
         <p class="eyebrow">
           <span></span>
-          ${product.categoryLabel || "Timepiece"}
+          ${category}
         </p>
 
         <h2 id="modal-title">
-          ${product.name}
+          ${name}
         </h2>
 
         <p>
-          ${product.description || product.short || ""}
+          ${description}
         </p>
 
         <div class="modal-details">
@@ -470,14 +992,14 @@ function openModal(product) {
           <span>
             <b>Palette</b>
             <strong>
-              ${product.palette || "Premium"}
+              ${palette}
             </strong>
           </span>
 
           <span>
             <b>Style</b>
             <strong>
-              ${product.style || product.categoryLabel || "Watch"}
+              ${style}
             </strong>
           </span>
 
@@ -495,7 +1017,9 @@ function openModal(product) {
           <button
             type="button"
             class="button button-gold"
-            data-modal-cart="${product.id}"
+            data-modal-cart="${escapeHTML(
+              String(product.id)
+            )}"
           >
             Add to Cart
           </button>
@@ -503,21 +1027,10 @@ function openModal(product) {
           <a
             class="button button-outline"
             href="${whatsappUrl(
-              `Hello VECTORA 👋
-
-I am interested in this watch:
-
-${product.name}
-
-Price: ${price}
-
-Product image:
-${window.location.origin}/${product.image}
-
-Please tell me the latest price and availability.`
+              message
             )}"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Ask on WhatsApp ↗
           </a>
@@ -529,274 +1042,470 @@ Please tell me the latest price and availability.`
     </div>
   `;
 
-  productModal.classList.add("is-open");
-  productModal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
+  productModal.classList.add(
+    "is-open"
+  );
+
+  productModal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
 
   setTimeout(() => {
-    $(".modal-close", productModal)?.focus();
+
+    $(".modal-close", productModal)
+      ?.focus();
+
   }, 50);
 }
 
-/* =========================
-   MODAL CART
-========================= */
+/* =========================================================
+   PRODUCT CLICK
+========================================================= */
 
-document.addEventListener("click", event => {
+document.addEventListener(
+  "click",
+  event => {
 
-  const modalCartButton =
-    event.target.closest("[data-modal-cart]");
+    const modalCart =
+      event.target.closest(
+        "[data-modal-cart]"
+      );
 
-  if (!modalCartButton) return;
+    if (modalCart) {
 
-  const product = products.find(
-    item => item.id === modalCartButton.dataset.modalCart
+      const product =
+        getProducts().find(
+          item =>
+            String(item.id) ===
+            String(
+              modalCart.dataset.modalCart
+            )
+        );
+
+      if (product) {
+        addToCart(product);
+      }
+
+      return;
+    }
+
+    const productButton =
+      event.target.closest(
+        ".open-product"
+      );
+
+    if (!productButton) {
+      return;
+    }
+
+    const id =
+      productButton.dataset.product;
+
+    const product =
+      getProducts().find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+    if (product) {
+      openProductModal(product);
+    }
+
+  }
+);
+
+/* =========================================================
+   CLOSE PRODUCT MODAL
+========================================================= */
+
+function closeModal(
+  modal
+) {
+
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.remove(
+    "is-open"
   );
 
-  if (product) {
-    addToCart(product);
-  }
-});
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
-/* =========================
-   CLOSE MODAL
-========================= */
+  document.body.classList.remove(
+    "modal-open"
+  );
 
-function closeModal(modal) {
+  if (
+    lastFocus &&
+    typeof lastFocus.focus ===
+      "function"
+  ) {
 
-  if (!modal) return;
-
-  modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
-
-  document.body.classList.remove("modal-open");
-
-  if (lastFocus) {
     lastFocus.focus();
   }
 }
 
-$$(".modal-close").forEach(button => {
+document.addEventListener(
+  "click",
+  event => {
 
-  button.addEventListener("click", () => {
-    closeModal(button.closest(".modal"));
-  });
+    const close =
+      event.target.closest(
+        "[data-close-modal], [data-close-image]"
+      );
 
-});
+    if (close) {
 
-$$(".modal-backdrop").forEach(backdrop => {
+      const modal =
+        close.closest(".modal");
 
-  backdrop.addEventListener("click", () => {
-    closeModal(backdrop.closest(".modal"));
-  });
+      closeModal(modal);
 
-});
+      return;
+    }
 
-/* =========================
-   PRODUCT OPEN
-========================= */
+    const modalClose =
+      event.target.closest(
+        ".modal-close"
+      );
 
-document.addEventListener("click", event => {
+    if (modalClose) {
 
-  const button =
-    event.target.closest(".open-product");
+      closeModal(
+        modalClose.closest(".modal")
+      );
+    }
 
-  if (!button) return;
-
-  const id = button.dataset.product;
-
-  if (
-    typeof products === "undefined" ||
-    !Array.isArray(products)
-  ) {
-    return;
   }
+);
 
-  const product =
-    products.find(item => item.id === id);
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
 
-  if (product) {
-    openModal(product);
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key !== "Escape"
+    ) {
+      return;
+    }
+
+    if (
+      productModal?.classList.contains(
+        "is-open"
+      )
+    ) {
+
+      closeModal(
+        productModal
+      );
+    }
+
+    if (
+      imageModal?.classList.contains(
+        "is-open"
+      )
+    ) {
+
+      closeModal(
+        imageModal
+      );
+    }
+
+    if (
+      cartDrawer?.classList.contains(
+        "is-open"
+      )
+    ) {
+
+      closeCart();
+    }
+
   }
-});
+);
 
-/* =========================
-   ESCAPE
-========================= */
-
-document.addEventListener("keydown", event => {
-
-  if (event.key !== "Escape") return;
-
-  if (productModal?.classList.contains("is-open")) {
-    closeModal(productModal);
-  }
-
-  if (imageModal?.classList.contains("is-open")) {
-    closeModal(imageModal);
-  }
-
-});
-
-/* =========================
+/* =========================================================
    PRODUCT FILTERS
-========================= */
+========================================================= */
 
-$$(".filter").forEach(button => {
+$$(".filter").forEach(
+  button => {
 
-  button.addEventListener("click", () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-    $$(".filter").forEach(item => {
-      item.classList.remove("active");
-    });
+        $$(".filter").forEach(
+          item =>
+            item.classList.remove(
+              "active"
+            )
+        );
 
-    button.classList.add("active");
+        button.classList.add(
+          "active"
+        );
 
-    renderProducts(
-      button.dataset.filter || "all"
+        renderProducts(
+          button.dataset.filter ||
+          "all"
+        );
+
+      }
     );
 
-  });
+  }
+);
 
-});
-
-/* =========================
+/* =========================================================
    GALLERY
-========================= */
+========================================================= */
 
 function renderGallery() {
 
-  if (!galleryGrid || typeof archive === "undefined") {
-    return;
-  }
-
-  galleryGrid.innerHTML = archive
-    .map((image, index) => `
-
-      <button
-        class="gallery-item"
-        type="button"
-        data-gallery-index="${index}"
-        aria-label="Open image ${index + 1}"
-      >
-
-        <img
-          src="${image.src}"
-          alt="${image.alt}"
-          loading="lazy"
-        />
-
-      </button>
-
-    `)
-    .join("");
-}
-
-function openLightbox(index) {
-
   if (
-    typeof archive === "undefined" ||
-    !archive[index] ||
-    !imageModal
+    !galleryGrid
   ) {
     return;
   }
 
-  lightboxIndex = index;
+  const images =
+    getArchive();
 
-  if (lightboxImage) {
-    lightboxImage.src = archive[index].src;
-    lightboxImage.alt = archive[index].alt;
+  if (!images.length) {
+    return;
   }
 
-  if (lightboxCount) {
-    lightboxCount.textContent =
-      `${index + 1} / ${archive.length}`;
-  }
+  galleryGrid.innerHTML =
+    images.map(
+      (image, index) => {
 
-  imageModal.classList.add("is-open");
-  imageModal.setAttribute("aria-hidden", "false");
+        const src =
+          escapeHTML(
+            image.src || ""
+          );
 
-  document.body.classList.add("modal-open");
+        const alt =
+          escapeHTML(
+            image.alt ||
+            `Watch image ${index + 1}`
+          );
+
+        return `
+          <button
+            class="gallery-item"
+            type="button"
+            data-gallery-index="${index}"
+            aria-label="Open image ${index + 1}"
+          >
+
+            <img
+              src="${src}"
+              alt="${alt}"
+              loading="lazy"
+            >
+
+          </button>
+        `;
+
+      }
+    ).join("");
 }
 
-document.addEventListener("click", event => {
+/* =========================================================
+   LIGHTBOX
+========================================================= */
 
-  const galleryButton =
-    event.target.closest("[data-gallery-index]");
+function openLightbox(
+  index
+) {
 
-  if (!galleryButton) return;
-
-  openLightbox(
-    Number(galleryButton.dataset.galleryIndex)
-  );
-
-});
-
-/* =========================
-   LIGHTBOX NEXT / PREVIOUS
-========================= */
-
-function changeLightbox(direction) {
+  const images =
+    getArchive();
 
   if (
-    typeof archive === "undefined" ||
-    !archive.length
+    !imageModal ||
+    !images[index]
   ) {
     return;
   }
 
   lightboxIndex =
-    (lightboxIndex + direction + archive.length)
-    % archive.length;
+    index;
 
-  openLightbox(lightboxIndex);
+  const image =
+    images[index];
+
+  if (lightboxImage) {
+
+    lightboxImage.src =
+      image.src || "";
+
+    lightboxImage.alt =
+      image.alt || "";
+  }
+
+  if (lightboxCount) {
+
+    lightboxCount.textContent =
+      `${index + 1} / ${images.length}`;
+  }
+
+  imageModal.classList.add(
+    "is-open"
+  );
+
+  imageModal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
 }
 
-$("[data-lightbox-next]")?.addEventListener(
+/* =========================================================
+   GALLERY CLICK
+========================================================= */
+
+document.addEventListener(
   "click",
-  () => changeLightbox(1)
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-gallery-index]"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    openLightbox(
+      Number(
+        button.dataset.galleryIndex
+      )
+    );
+  }
 );
 
-$("[data-lightbox-prev]")?.addEventListener(
-  "click",
-  () => changeLightbox(-1)
-);
+/* =========================================================
+   GALLERY NEXT / PREVIOUS
+========================================================= */
 
-document.addEventListener("keydown", event => {
+function changeLightbox(
+  direction
+) {
 
-  if (!imageModal?.classList.contains("is-open")) {
+  const images =
+    getArchive();
+
+  if (!images.length) {
     return;
   }
 
-  if (event.key === "ArrowRight") {
-    changeLightbox(1);
+  lightboxIndex =
+    (
+      lightboxIndex +
+      direction +
+      images.length
+    ) % images.length;
+
+  openLightbox(
+    lightboxIndex
+  );
+}
+
+/*
+   IMPORTANT:
+   Your HTML uses .gallery-next and
+   .gallery-prev.
+*/
+
+$(".gallery-next")
+  ?.addEventListener(
+    "click",
+    () => changeLightbox(1)
+  );
+
+$(".gallery-prev")
+  ?.addEventListener(
+    "click",
+    () => changeLightbox(-1)
+  );
+
+/* =========================================================
+   GALLERY KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      !imageModal?.classList.contains(
+        "is-open"
+      )
+    ) {
+      return;
+    }
+
+    if (
+      event.key ===
+      "ArrowRight"
+    ) {
+
+      changeLightbox(1);
+    }
+
+    if (
+      event.key ===
+      "ArrowLeft"
+    ) {
+
+      changeLightbox(-1);
+    }
+
   }
+);
 
-  if (event.key === "ArrowLeft") {
-    changeLightbox(-1);
-  }
-
-});
-
-/* =========================
+/* =========================================================
    SCROLL REVEAL
-========================= */
+========================================================= */
 
 function initRevealAnimations() {
 
   const elements =
     $$(".reveal:not(.revealed)");
 
-  if (!elements.length) return;
+  if (!elements.length) {
+    return;
+  }
 
   if (
     !("IntersectionObserver" in window)
   ) {
 
-    elements.forEach(element => {
-      element.classList.add("revealed");
-    });
+    elements.forEach(
+      element =>
+        element.classList.add(
+          "revealed"
+        )
+    );
 
     return;
   }
@@ -805,85 +1514,222 @@ function initRevealAnimations() {
     new IntersectionObserver(
       entries => {
 
-        entries.forEach(entry => {
+        entries.forEach(
+          entry => {
 
-          if (!entry.isIntersecting) {
-            return;
+            if (
+              !entry.isIntersecting
+            ) {
+              return;
+            }
+
+            entry.target.classList.add(
+              "revealed"
+            );
+
+            observer.unobserve(
+              entry.target
+            );
+
           }
-
-          entry.target.classList.add("revealed");
-
-          observer.unobserve(entry.target);
-
-        });
+        );
 
       },
       {
         threshold: 0.12,
-        rootMargin: "0px 0px -50px 0px"
+        rootMargin:
+          "0px 0px -50px 0px"
       }
     );
 
-  elements.forEach(element => {
-    observer.observe(element);
-  });
+  elements.forEach(
+    element =>
+      observer.observe(
+        element
+      )
+  );
 }
 
-/* =========================
-   VELOCITY SCROLL
-========================= */
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
+
+function updateScrollProgress() {
+
+  const documentHeight =
+    document.documentElement
+      .scrollHeight;
+
+  const viewportHeight =
+    window.innerHeight;
+
+  const scrollable =
+    documentHeight -
+    viewportHeight;
+
+  const progress =
+    scrollable > 0
+      ? (window.scrollY /
+          scrollable) *
+        100
+      : 0;
+
+  document.documentElement.style
+    .setProperty(
+      "--scroll-progress",
+      `${progress}%`
+    );
+}
+
+/* =========================================================
+   HEADER SCROLL
+========================================================= */
+
+function initHeaderScroll() {
+
+  const headers =
+    $$(
+      ".site-header, header"
+    );
+
+  if (!headers.length) {
+    return;
+  }
+
+  const update =
+    () => {
+
+      const scrolled =
+        window.scrollY > 40;
+
+      headers.forEach(
+        header =>
+          header.classList.toggle(
+            "scrolled",
+            scrolled
+          )
+      );
+    };
+
+  window.addEventListener(
+    "scroll",
+    update,
+    { passive: true }
+  );
+
+  update();
+}
+
+/* =========================================================
+   BACK TO TOP
+========================================================= */
+
+function initBackToTop() {
+
+  if (!backToTop) {
+    return;
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+
+      backToTop.classList.toggle(
+        "is-visible",
+        window.scrollY > 600
+      );
+
+    },
+    { passive: true }
+  );
+
+  backToTop.addEventListener(
+    "click",
+    () => {
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+  );
+}
+
+/* =========================================================
+   VELOCITY ROWS
+========================================================= */
 
 function initVelocityRows() {
 
   const rows =
     $$("[data-velocity-row]");
 
-  if (!rows.length) return;
+  if (!rows.length) {
+    return;
+  }
 
   let ticking = false;
 
-  function updateRows() {
+  function update() {
 
-    const scrollY = window.scrollY;
+    rows.forEach(
+      row => {
 
-    rows.forEach(row => {
+        const rect =
+          row.getBoundingClientRect();
 
-      const rect =
-        row.getBoundingClientRect();
+        const distance =
+          Number(
+            row.dataset.distance ||
+            -250
+          );
 
-      const distance =
-        Number(row.dataset.distance || -250);
+        const direction =
+          Number(
+            row.dataset.direction ||
+            1
+          );
 
-      const direction =
-        Number(row.dataset.direction || 1);
+        const center =
+          window.innerHeight / 2;
 
-      const viewportCenter =
-        window.innerHeight / 2;
+        const rowCenter =
+          rect.top +
+          rect.height / 2;
 
-      const rowCenter =
-        rect.top + rect.height / 2;
+        const progress =
+          (rowCenter - center) /
+          window.innerHeight;
 
-      const progress =
-        (rowCenter - viewportCenter) /
-        window.innerHeight;
+        const movement =
+          progress *
+          distance *
+          direction;
 
-      const movement =
-        progress * distance * direction;
-
-      row.style.transform =
-        `translate3d(${movement}px,0,0)`;
-    });
+        row.style.transform =
+          `translate3d(
+            ${movement}px,
+            0,
+            0
+          )`;
+      }
+    );
 
     ticking = false;
   }
 
   function requestUpdate() {
 
-    if (!ticking) {
-      requestAnimationFrame(updateRows);
-      ticking = true;
+    if (ticking) {
+      return;
     }
 
+    ticking = true;
+
+    requestAnimationFrame(
+      update
+    );
   }
 
   window.addEventListener(
@@ -892,12 +1738,12 @@ function initVelocityRows() {
     { passive: true }
   );
 
-  updateRows();
+  update();
 }
 
-/* =========================
+/* =========================================================
    PREMIUM CURSOR
-========================= */
+========================================================= */
 
 function initCursor() {
 
@@ -909,15 +1755,27 @@ function initCursor() {
     return;
   }
 
+  if (
+    $(".premium-cursor")
+  ) {
+    return;
+  }
+
   const cursor =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  cursor.className = "premium-cursor";
+  cursor.className =
+    "premium-cursor";
 
-  document.body.appendChild(cursor);
+  document.body.appendChild(
+    cursor
+  );
 
   let mouseX = 0;
   let mouseY = 0;
+
   let currentX = 0;
   let currentY = 0;
 
@@ -925,42 +1783,56 @@ function initCursor() {
     "mousemove",
     event => {
 
-      mouseX = event.clientX;
-      mouseY = event.clientY;
+      mouseX =
+        event.clientX;
+
+      mouseY =
+        event.clientY;
 
     },
     { passive: true }
   );
 
-  function animateCursor() {
+  function animate() {
 
     currentX +=
-      (mouseX - currentX) * 0.18;
+      (mouseX - currentX) *
+      0.16;
 
     currentY +=
-      (mouseY - currentY) * 0.18;
+      (mouseY - currentY) *
+      0.16;
 
     cursor.style.transform =
-      `translate3d(${currentX}px,${currentY}px,0)`;
+      `translate3d(
+        ${currentX}px,
+        ${currentY}px,
+        0
+      )`;
 
     requestAnimationFrame(
-      animateCursor
+      animate
     );
   }
 
-  animateCursor();
+  animate();
 
   const interactive =
-    "a,button,input,textarea,select,.product-card";
+    "a, button, input, textarea, select, .product-card";
 
   document.addEventListener(
     "mouseover",
     event => {
 
       if (
-        event.target.closest(interactive)
+        event.target.closest(
+          interactive
+        )
       ) {
-        cursor.classList.add("cursor-hover");
+
+        cursor.classList.add(
+          "cursor-hover"
+        );
       }
 
     }
@@ -971,8 +1843,11 @@ function initCursor() {
     event => {
 
       if (
-        event.target.closest(interactive)
+        event.target.closest(
+          interactive
+        )
       ) {
+
         cursor.classList.remove(
           "cursor-hover"
         );
@@ -982,16 +1857,18 @@ function initCursor() {
   );
 }
 
-/* =========================
-   PARALLAX HERO
-========================= */
+/* =========================================================
+   HERO PARALLAX
+========================================================= */
 
 function initHeroParallax() {
 
   const hero =
     $(".hero");
 
-  if (!hero) return;
+  if (!hero) {
+    return;
+  }
 
   if (
     window.matchMedia(
@@ -1005,16 +1882,18 @@ function initHeroParallax() {
 
   function update() {
 
-    const scrollY =
+    const scroll =
       window.scrollY;
 
-    if (scrollY < window.innerHeight) {
+    if (
+      scroll <
+      window.innerHeight
+    ) {
 
       hero.style.setProperty(
         "--hero-scroll",
-        `${scrollY * 0.18}px`
+        `${scroll * 0.18}px`
       );
-
     }
 
     ticking = false;
@@ -1024,19 +1903,24 @@ function initHeroParallax() {
     "scroll",
     () => {
 
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
+      if (ticking) {
+        return;
       }
+
+      ticking = true;
+
+      requestAnimationFrame(
+        update
+      );
 
     },
     { passive: true }
   );
 }
 
-/* =========================
+/* =========================================================
    IMAGE TILT
-========================= */
+========================================================= */
 
 function initImageTilt() {
 
@@ -1048,6 +1932,9 @@ function initImageTilt() {
     return;
   }
 
+  let currentCard =
+    null;
+
   document.addEventListener(
     "mousemove",
     event => {
@@ -1057,31 +1944,37 @@ function initImageTilt() {
           ".product-card"
         );
 
-      if (!card) return;
+      if (!card) {
+        return;
+      }
+
+      currentCard =
+        card;
 
       const rect =
         card.getBoundingClientRect();
 
       const x =
-        (event.clientX - rect.left) /
+        (event.clientX -
+          rect.left) /
         rect.width;
 
       const y =
-        (event.clientY - rect.top) /
+        (event.clientY -
+          rect.top) /
         rect.height;
 
       const rotateY =
-        (x - 0.5) * 5;
+        (x - 0.5) * 4;
 
       const rotateX =
-        (0.5 - y) * 5;
+        (0.5 - y) * 4;
 
       card.style.transform =
         `perspective(900px)
          rotateX(${rotateX}deg)
          rotateY(${rotateY}deg)
          translateY(-4px)`;
-
     },
     { passive: true }
   );
@@ -1095,47 +1988,70 @@ function initImageTilt() {
           ".product-card"
         );
 
-      if (!card) return;
+      if (!card) {
+        return;
+      }
 
-      card.style.transform = "";
-
+      card.style.transform =
+        "";
     }
   );
 }
 
-/* =========================
+/* =========================================================
    CONTACT FORM
-========================= */
+========================================================= */
 
-const contactForm =
-  $("#contact-form");
+function initContactForm() {
 
-contactForm?.addEventListener(
-  "submit",
-  event => {
+  const form =
+    $("#contact-form");
 
-    event.preventDefault();
+  if (!form) {
+    return;
+  }
 
-    const formData =
-      new FormData(contactForm);
+  form.addEventListener(
+    "submit",
+    event => {
 
-    const name =
-      formData.get("name") || "";
+      event.preventDefault();
 
-    const phone =
-      formData.get("phone") || "";
+      const formData =
+        new FormData(form);
 
-    const interest =
-      formData.get("interest") || "";
+      const name =
+        String(
+          formData.get("name") || ""
+        ).trim();
 
-    const message =
-      formData.get("message") || "";
+      const phone =
+        String(
+          formData.get("phone") || ""
+        ).trim();
 
-    const whatsappMessage =
+      const interest =
+        String(
+          formData.get("interest") ||
+          ""
+        ).trim();
+
+      const message =
+        String(
+          formData.get("message") ||
+          ""
+        ).trim();
+
+      const whatsappMessage =
 `Hello VECTORA 👋
 
-Name: ${name}
-Phone: ${phone}
+New enquiry:
+
+Name:
+${name}
+
+Phone:
+${phone}
 
 Interested in:
 ${interest}
@@ -1146,111 +2062,156 @@ ${message}
 Email:
 ${STORE_EMAIL}`;
 
-    window.open(
-      whatsappUrl(whatsappMessage),
-      "_blank",
-      "noopener,noreferrer"
-    );
+      window.open(
+        whatsappUrl(
+          whatsappMessage
+        ),
+        "_blank",
+        "noopener,noreferrer"
+      );
 
-    contactForm.reset();
+      form.reset();
 
-  }
-);
+      showToast(
+        "Opening WhatsApp..."
+      );
+    }
+  );
+}
 
-/* =========================
-   EMAIL REPLACEMENT
-========================= */
+/* =========================================================
+   EMAIL
+========================================================= */
 
-$$('a[href^="mailto:"]').forEach(
-  link => {
+function updateEmails() {
 
-    link.href =
-      `mailto:${STORE_EMAIL}`;
+  $$(
+    'a[href^="mailto:"]'
+  ).forEach(
+    link => {
 
-    link.textContent =
-      STORE_EMAIL;
+      link.href =
+        `mailto:${STORE_EMAIL}`;
 
-  }
-);
+      /*
+        Only replace visible email text.
+        Do not overwrite unrelated labels.
+      */
 
-/* =========================
-   GENERAL WHATSAPP BUTTONS
-========================= */
+      const text =
+        link.textContent.trim();
 
-$$(
-  'a[href*="wa.me/"]'
-).forEach(link => {
+      if (
+        text.includes("@")
+      ) {
 
-  const oldHref =
-    link.getAttribute("href");
+        link.textContent =
+          STORE_EMAIL;
+      }
+    }
+  );
+}
 
-  if (!oldHref) return;
+/* =========================================================
+   PHONE / WHATSAPP LINKS
+========================================================= */
 
-  try {
+function updateWhatsAppLinks() {
 
-    const url =
-      new URL(oldHref);
+  $$(
+    'a[href*="wa.me/"]'
+  ).forEach(
+    link => {
 
-    const text =
-      url.searchParams.get("text");
+      const href =
+        link.getAttribute(
+          "href"
+        );
 
-    if (text) {
+      if (!href) {
+        return;
+      }
 
-      const newMessage =
-        text
-          .replace(
+      try {
+
+        const url =
+          new URL(
+            href,
+            window.location.href
+          );
+
+        const oldText =
+          url.searchParams.get(
+            "text"
+          );
+
+        if (!oldText) {
+          return;
+        }
+
+        const newText =
+          oldText.replace(
             /Time Extra/gi,
             "VECTORA"
           );
 
-      link.href =
-        whatsappUrl(newMessage);
+        link.href =
+          whatsappUrl(
+            newText
+          );
 
+      } catch {
+        // Ignore invalid URLs
+      }
     }
+  );
+}
 
-  } catch {
-    // Ignore malformed URLs.
-  }
-
-});
-
-/* =========================
-   VIDEO AUTOPLAY
-========================= */
+/* =========================================================
+   VIDEOS
+========================================================= */
 
 function initVideos() {
 
   const videos =
     $$("video");
 
-  if (!videos.length) return;
+  if (!videos.length) {
+    return;
+  }
 
   if (
     !("IntersectionObserver" in window)
-  ) return;
+  ) {
+    return;
+  }
 
   const observer =
     new IntersectionObserver(
       entries => {
 
-        entries.forEach(entry => {
+        entries.forEach(
+          entry => {
 
-          const video =
-            entry.target;
+            const video =
+              entry.target;
 
-          if (entry.isIntersecting) {
+            if (
+              entry.isIntersecting
+            ) {
 
-            video.play().catch(
-              () => {}
-            );
+              video.play()
+                .catch(
+                  () => {}
+                );
 
-          } else {
+            } else {
 
-            video.pause();
+              video.pause();
+            }
 
           }
-
-        });
+        );
 
       },
       {
@@ -1258,63 +2219,168 @@ function initVideos() {
       }
     );
 
-  videos.forEach(video => {
-    observer.observe(video);
-  });
+  videos.forEach(
+    video =>
+      observer.observe(
+        video
+      )
+  );
 }
 
-/* =========================
+/* =========================================================
+   YEAR
+========================================================= */
+
+function updateYear() {
+
+  const year =
+    $("#year");
+
+  if (year) {
+    year.textContent =
+      new Date().getFullYear();
+  }
+}
+
+/* =========================================================
    MOBILE PERFORMANCE
-========================= */
+========================================================= */
 
 function optimizeMobile() {
 
-  const isMobile =
-    window.innerWidth <= 768;
-
-  if (!isMobile) return;
+  const mobile =
+    window.matchMedia(
+      "(max-width: 768px)"
+    ).matches;
 
   document.documentElement
-    .classList.add("mobile-device");
-
-  $$("video").forEach(video => {
-
-    video.setAttribute(
-      "preload",
-      "none"
+    .classList.toggle(
+      "mobile-device",
+      mobile
     );
 
-  });
+  if (!mobile) {
+    return;
+  }
+
+  $$("video").forEach(
+    video => {
+
+      if (
+        !video.hasAttribute(
+          "data-keep-preload"
+        )
+      ) {
+
+        video.setAttribute(
+          "preload",
+          "none"
+        );
+      }
+
+    }
+  );
 }
 
-/* =========================
+/* =========================================================
    INITIALIZE
-========================= */
+========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
+function initVectora() {
+
+  renderProducts(
+    "all"
+  );
+
+  renderGallery();
+
+  renderCart();
+
+  updateCartUI();
+
+  updateYear();
+
+  updateEmails();
+
+  updateWhatsAppLinks();
+
+  initRevealAnimations();
+
+  initVelocityRows();
+
+  initCursor();
+
+  initHeroParallax();
+
+  initImageTilt();
+
+  initContactForm();
+
+  initVideos();
+
+  initHeaderScroll();
+
+  initBackToTop();
+
+  optimizeMobile();
+
+  updateScrollProgress();
+
+  /* -------------------------------------------------------
+     Cart button fallback
+  ------------------------------------------------------- */
+
+  $$(".cart-trigger, [data-cart-open]").forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+
+          openCart();
+        }
+      );
+    }
+  );
+}
+
+/* =========================================================
+   GLOBAL SCROLL
+========================================================= */
+
+let scrollTicking = false;
+
+window.addEventListener(
+  "scroll",
   () => {
 
-    renderProducts("all");
-    renderGallery();
-    renderCart();
+    if (scrollTicking) {
+      return;
+    }
 
-    initRevealAnimations();
-    initVelocityRows();
-    initCursor();
-    initHeroParallax();
-    initImageTilt();
-    initVideos();
-    optimizeMobile();
+    scrollTicking = true;
 
-    updateCartUI();
+    requestAnimationFrame(
+      () => {
 
+        updateScrollProgress();
+
+        scrollTicking = false;
+
+      }
+    );
+
+  },
+  {
+    passive: true
   }
 );
 
-/* =========================
-   WINDOW RESIZE
-========================= */
+/* =========================================================
+   RESIZE
+========================================================= */
 
 let resizeTimer;
 
@@ -1322,15 +2388,37 @@ window.addEventListener(
   "resize",
   () => {
 
-    clearTimeout(resizeTimer);
-
-    resizeTimer = setTimeout(
-      () => {
-        optimizeMobile();
-      },
-      180
+    clearTimeout(
+      resizeTimer
     );
 
+    resizeTimer =
+      setTimeout(
+        optimizeMobile,
+        180
+      );
+
   },
-  { passive: true }
+  {
+    passive: true
+  }
 );
+
+/* =========================================================
+   DOM READY
+========================================================= */
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initVectora
+  );
+
+} else {
+
+  initVectora();
+}
